@@ -3,12 +3,7 @@ module Views.Bukela (
   mkView
 ) where
 
-import DOM
-import Mithril.HTML
-import Views.Bukela.Controls
-import Views.HelloWorldComponent as HWComponent
 import Prelude
-
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Ref (Ref, newRef)
@@ -16,8 +11,12 @@ import Control.Monad.Eff.Unsafe (unsafePerformEff)
 import Data.Array (find, findIndex, updateAt)
 import Data.Number as Number
 import Data.Maybe (Maybe(..), maybe)
-import Mithril (VNode, Component, mkComponent, raise)
+import Webfu.DOM
+import Webfu.Mithril (VNode, Component, mkComponent, raise)
+import Webfu.Mithril.HTML
 
+import Views.Bukela.Controls
+import Views.HelloWorldComponent as HWComponent
 
 -----------------------------------------------------------
 -- STATE

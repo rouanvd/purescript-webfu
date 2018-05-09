@@ -1,4 +1,4 @@
-module Data.ObjMap
+module Webfu.Data.ObjMap
   ( Obj
   , empty
   , allKeys

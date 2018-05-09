@@ -1,5 +1,5 @@
-module DOM (
-  module DOM.Core,
+module Webfu.DOM (
+  module Webfu.DOM.Core,
   nodeChildNodes, nodeFirstChild, nodeLastChild, nodeNextSibling, nodePreviousSibling, nodeName, nodeType, nodeValue, nodeOwnerDocument, nodeParentNode, nodeParentElement,
   window,
   win_alert,
@@ -17,8 +17,8 @@ import Prelude (Unit, unit, ($))
 import Data.Maybe
 import Control.Monad.Eff (kind Effect, Eff)
 import Unsafe.Coerce (unsafeCoerce)
-import DOM.Core
-import DOM.Promise (Promise)
+import Webfu.DOM.Core
+import Webfu.DOM.Promise (Promise)
 
 
 ---------------------------------------------------------------

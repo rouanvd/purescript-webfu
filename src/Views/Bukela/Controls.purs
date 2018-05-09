@@ -18,13 +18,12 @@ module Views.Bukela.Controls
 , getIndicators
 ) where
 
-import Mithril.HTML
 import Prelude
-
 import Data.Array (length)
 import Data.Foldable (foldl)
 import Data.Int (toNumber)
-import Mithril (VNode, Component, mkComponent, raise)
+import Webfu.Mithril (VNode, Component, mkComponent, raise)
+import Webfu.Mithril.HTML
 
 -----------------------------------------------------------
 -- GENERAL CONTROL DATA & FUNCTIONS

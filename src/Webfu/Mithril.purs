@@ -1,4 +1,4 @@
-module Mithril (
+module Webfu.Mithril (
   VNode,
   Component,
   mkVNode,
@@ -27,12 +27,11 @@ import Data.Function.Uncurried (Fn1, runFn1, Fn3, runFn3, Fn4, runFn4, Fn5, runF
 import Data.Maybe
 import Data.Either (Either(..), fromLeft, fromRight, isLeft)
 import Data.StrMap (StrMap)
-import Data.ObjMap (Obj)
 import Control.Monad.Eff.Ref (REF, Ref, writeRef, readRef, newRef)
-import DOM (DOM, Element)
 import Partial.Unsafe (unsafePartial)
 import Control.Monad.Eff (kind Effect, Eff)
-
+import Webfu.Data.ObjMap (Obj)
+import Webfu.DOM (DOM, Element)
 
 type Attributes = Obj
 

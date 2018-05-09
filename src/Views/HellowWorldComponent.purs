@@ -3,10 +3,7 @@ module Views.HelloWorldComponent (
   mkView
 ) where
 
-import DOM
-import Mithril.HTML
 import Prelude hiding (div)
-
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Ref (Ref, newRef)
@@ -14,7 +11,9 @@ import Control.Monad.Eff.Unsafe (unsafePerformEff)
 import Data.Array (find, findIndex, updateAt)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), maybe)
-import Mithril (VNode, Component, mkComponent, onInit, onRemove, raise)
+import Webfu.DOM
+import Webfu.Mithril (VNode, Component, mkComponent, onInit, onRemove, raise)
+import Webfu.Mithril.HTML
 
 
 -----------------------------------------------------------

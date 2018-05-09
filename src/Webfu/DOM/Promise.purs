@@ -1,4 +1,4 @@
-module DOM.Promise (
+module Webfu.DOM.Promise (
   Promise,
   mkPromise,
   mkResolve,
@@ -13,7 +13,7 @@ module DOM.Promise (
 import Prelude
 import Control.Monad.Eff
 import Data.Function.Uncurried (Fn1, runFn1, Fn2, runFn2)
-import DOM.Core (DOM)
+import Webfu.DOM.Core (DOM)
 
 foreign import data Promise :: Type -> Type -> Type
 

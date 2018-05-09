@@ -1,12 +1,12 @@
-module Mithril.HTML where
+module Webfu.Mithril.HTML where
 
 import Data.Either
 import Data.Array (foldl)
 import Data.StrMap (StrMap)
 import Data.StrMap (empty, insert, fold) as StrMap
-import Data.ObjMap (Obj, empty, insert)
-import Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 import Prelude (class Show, show, (<>), (#))
+import Webfu.Data.ObjMap (Obj, empty, insert)
+import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 
 
 ---------------------------------------------------------------

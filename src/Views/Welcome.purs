@@ -7,10 +7,10 @@ import Prelude (discard, Unit, show, pure, bind, ($), (+), (<>), (>>=))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Ref (Ref, newRef)
-import Mithril (Component, mkComponent, raise)
-import Mithril.HTML
-import DOM (DOM, window, win_fetch, win_alert)
-import DOM.Promise (Promise, mkPromise, then_, catch_, mkResolve, mkReject)
+import Webfu.Mithril (Component, mkComponent, raise)
+import Webfu.Mithril.HTML
+import Webfu.DOM (DOM, window, win_fetch, win_alert)
+import Webfu.DOM.Promise (Promise, mkPromise, then_, catch_, mkResolve, mkReject)
 
 
 -----------------------------------------------------------

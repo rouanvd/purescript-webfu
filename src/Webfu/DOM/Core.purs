@@ -1,4 +1,4 @@
-module DOM.Core (
+module Webfu.DOM.Core (
   class Convertible, convert,
   DOM,
   Node,

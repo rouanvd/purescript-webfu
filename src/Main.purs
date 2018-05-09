@@ -3,11 +3,11 @@ module Main where
 import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE)
-import DOM (DOM, doc_querySelector)
 import Data.Maybe (fromJust)
 import Data.StrMap (StrMap, empty, insert)
-import Mithril (Component, route) as M
 import Partial.Unsafe (unsafePartial)
+import Webfu.DOM (DOM, doc_querySelector)
+import Webfu.Mithril (Component, route) as M
 
 import Views.Welcome (mkView, state) as WelcomeView
 import Views.Bukela (mkView, state) as BukelaView
