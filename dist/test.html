@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="mithril.js"></script>
+    <script src="kefir.js"></script>
+    <link rel="stylesheet" href="test.css" />
+  </head>
+  <body>
+    <div id="div1"></div>
+
+    <script src="output.js"></script>
+    <script>
+
+    function ftch() {
+      window.fetch('http://localhost:8080/hello')
+            .then(function (response) {
+              if (response.ok) {
+                return response.text();
+              } else {
+                throw new Error();
+              }
+            })
+            .then(
+              function (r) {console.log( r );},
+              function () {console.log( 'booooom!' );}
+            );
+    }
+
+
+
+// // translate page to SVG co-ordinate
+// function svgPoint(element, x, y) {
+//   var pt = svg.createSVGPoint();
+
+//   pt.x = x;
+//   pt.y = y;
+
+//   return pt.matrixTransform(element.getScreenCTM().inverse());
+// }
+
+
+// function eventsPositionDiff(prevEvent, nextEvent) {
+//   return {
+//     x: nextEvent.clientX - prevEvent.clientX,
+//     y: nextEvent.clientY - prevEvent.clientY
+//   };
+// }
+
+// function applyMove(currentPosition, move) {
+//   return {
+//     x: currentPosition.x + move.x,
+//     y: currentPosition.y + move.y
+//   };
+// }
+
+
+// // Primary sources
+// var mouseDowns = Kefir.fromEvents(document.querySelector('#Bshop_oven2'), 'mousedown');
+// var mouseUps = Kefir.fromEvents(document, 'mouseup');
+// var mouseMoves = Kefir.fromEvents(document, 'mousemove');
+
+
+// // Compose primary sources to create observables we need
+// var moves = mouseDowns.flatMap(function(downEvent) {
+//   return mouseMoves.takeUntilBy(mouseUps)
+//                    .diff(eventsPositionDiff, downEvent);
+// });
+
+
+// var el = document.querySelector('#Bshop_oven2');
+// var svgPos_ = svgPoint( el, el.getAttribute('x'), el.getAttribute('y') );
+// var position = moves.scan(applyMove, {x: svgPos_.x, y: svgPos_.y});
+
+
+// // Add side effect
+
+// position.onValue(function(pos) {
+//   var o = document.getElementById( 'newIndicatorValue' );
+//   o.value = pos.x + ', ' + pos.y + '(' + el.getAttribute('x') + ',' + el.getAttribute('y') + ')';
+//   var svgPos = svgPoint( el, pos.x, pos.y );
+//   el.setAttribute('x', svgPos.x);
+//   el.setAttribute('y', svgPos.y);
+// });
+
+    </script>
+  </body>
+</html>

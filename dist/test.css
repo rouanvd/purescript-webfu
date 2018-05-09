@@ -1,0 +1,33 @@
+html {
+  height:95%;
+}
+body {
+  height:95%;
+}
+svg {
+  background-color: #eee;
+}
+.label-box {
+  fill: white;
+}
+.label-text {
+  font-size: 8px;
+}
+
+.outerBox {
+  stroke: grey;
+  fill: #eee;
+}
+.innerBox {
+  fill: lime;
+}
+.indicator-label {
+  font-size: 8px;
+}
+.indicator-value {
+  font-size: 8px;
+}
+.indicator-value-box {
+  fill: white;
+  border:1px sold #000;
+}
