@@ -18,7 +18,8 @@
     "purescript-control": "^3.3.0",
     "purescript-maps": "^3.3.1",
     "purescript-numbers": "^5.0.0",
-    "purescript-refs": "^3.0.0"
+    "purescript-refs": "^3.0.0",
+    "purescript-foreign": "^4.0.1"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0"
