@@ -3,7 +3,6 @@ module Webfu.DOM (
   nodeChildNodes, nodeFirstChild, nodeLastChild, nodeNextSibling, nodePreviousSibling, nodeName, nodeType, nodeValue, nodeOwnerDocument, nodeParentNode, nodeParentElement,
   window,
   win_alert,
-  win_fetch,
   document,
   doc_getElementById,
   doc_querySelector,
@@ -74,10 +73,6 @@ foreign import window :: forall eff. Eff (dom :: DOM | eff) Window
 foreign import win_alert_foreign :: forall eff. Unit -> String -> Window -> Eff (dom :: DOM | eff) Unit
 win_alert :: forall eff. String -> Window -> Eff (dom :: DOM | eff) Unit
 win_alert msg w = win_alert_foreign unit msg w
-
-foreign import win_fetch_foreign :: forall eff. String -> Window -> Eff (dom :: DOM | eff) (Promise String String)
-win_fetch :: forall eff. String -> Window -> Eff (dom :: DOM | eff) (Promise String String)
-win_fetch url w = win_fetch_foreign url w
 
 
 ---------------------------------------------------------------

@@ -156,18 +156,6 @@ exports.win_alert_foreign = function (unit_val) {
 };
 
 
-exports.win_fetch_foreign = function (url) {
-  return function (w) {
-
-    return function () { // Eff wrapper
-      var promise = w.fetch( url );
-      return promise;
-    };
-
-  };
-};
-
-
 exports.document = function () {
   return document;
 };

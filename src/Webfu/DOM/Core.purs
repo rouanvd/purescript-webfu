@@ -15,19 +15,6 @@ import Unsafe.Coerce (unsafeCoerce)
 -- https://developer.mozilla.org/en-US/docs/Web/API
 
 
-{-
-  class Node
-
-  class ParentNode
-
-  type DocumentType
-  (Node, ParentNode) => type Document
-  (Node, ParentNode) => type Element
-  type Attr
-
-  (Node) => type Text
--}
-
 foreign import data DOM :: Effect
 
 foreign import data Window :: Type

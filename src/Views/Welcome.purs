@@ -9,7 +9,8 @@ import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Ref (Ref, newRef)
 import Webfu.Mithril (Component, mkComponent, raise)
 import Webfu.Mithril.HTML
-import Webfu.DOM (DOM, window, win_fetch, win_alert)
+import Webfu.DOM (DOM, window, win_alert)
+import Webfu.DOM.Fetch (win_fetch)
 import Webfu.DOM.Promise (Promise, mkPromise, then_, catch_, mkResolve, mkReject)
 
 
