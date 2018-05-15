@@ -5,10 +5,12 @@ module Webfu.Data.ObjMap
   , member
   , isSubObj
   , isEmpty
-  , insert
+  , insert, (:=)
+  , mkObjWithProps
   ) where
 
 import Control.Monad.ST
+import Data.Array (foldl)
 import Data.Function.Uncurried
 import Prelude
 
@@ -24,12 +26,25 @@ foreign import _copyEff :: forall a b h r. a -> Eff (st :: ST h | r) b
 -- | An empty map
 foreign import empty :: Obj
 
-
 -- | Test whether all keys in an `Obj` satisfy a predicate.
 foreign import allKeys :: (String -> Boolean) -> Obj -> Boolean
 
-
 foreign import _lookupKey :: forall a. Fn4 a (String -> a) String Obj a
+
+
+-- | Insert or replace a key/value pair in a map.
+foreign import _insert :: forall a. Fn3 String a Obj Obj
+insert :: forall a. String -> a -> Obj -> Obj
+insert key val obj = runFn3 _insert key val obj
+
+
+-- | infix version of `insert`.
+infixl 5 insert as :=
+
+
+-- | 
+mkObjWithProps :: Array (Obj -> Obj) -> Obj
+mkObjWithProps setters = foldl (\obj insertF -> insertF obj) empty setters
 
 
 -- | Test whether a `String` appears as a key in a map
@@ -47,7 +62,4 @@ isEmpty :: Obj -> Boolean
 isEmpty = allKeys (\_ -> false)
 
 
--- | Insert or replace a key/value pair in a map
-foreign import _insert :: forall a. Fn3 Obj String a Obj
-insert :: forall a. Obj -> String -> a -> Obj
-insert obj key val = runFn3 _insert obj key val
+

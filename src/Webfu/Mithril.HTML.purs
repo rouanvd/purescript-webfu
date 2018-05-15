@@ -1,11 +1,14 @@
-module Webfu.Mithril.HTML where
+module Webfu.Mithril.HTML 
+  ( module Webfu.Mithril.HTML
+  , module Webfu.Data.ObjMap
+  )where
 
 import Data.Either
 import Data.Array (foldl)
 import Data.StrMap (StrMap)
 import Data.StrMap (empty, insert, fold) as StrMap
 import Prelude (class Show, show, (<>), (#))
-import Webfu.Data.ObjMap (Obj, empty, insert)
+import Webfu.Data.ObjMap (Obj, empty, (:=), mkObjWithProps)
 import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 
 
@@ -16,19 +19,6 @@ import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 type Attributes = Obj
 type AttributeSetterF = Attributes -> Attributes
 type AttributeSpec = Array AttributeSetterF
-
-
-insertObj :: forall a. String -> a -> AttributeSetterF
-insertObj key val obj =
-  insert obj key val
-
-
-infixl 5 insertObj as :=
-
-
-runAttrSpec :: AttributeSpec -> Attributes
-runAttrSpec setterFs =
-  foldl (\strMap setterF -> setterF strMap) empty setterFs
 
 
 ---------------------------------------------------------------
@@ -74,25 +64,25 @@ mcomp component = mkComponentVNode component
 ---------------------------------------------------------------
 
 main :: AttributeSpec -> Array VNode -> VNode
-main attrs childNodes = mkVNode (Left "main") (runAttrSpec attrs) childNodes
+main attrs childNodes = mkVNode (Left "main") (mkObjWithProps attrs) childNodes
 
 h1 :: AttributeSpec -> Array VNode -> VNode
-h1 attrs childNodes = mkVNode (Left "h1") (runAttrSpec attrs) childNodes
+h1 attrs childNodes = mkVNode (Left "h1") (mkObjWithProps attrs) childNodes
 
 h1' :: AttributeSpec -> String -> VNode
-h1' attrs text = mkTextVNode (Left "h1") (runAttrSpec attrs) text
+h1' attrs text = mkTextVNode (Left "h1") (mkObjWithProps attrs) text
 
 br :: AttributeSpec -> VNode
-br attrs = mkVNode (Left "br") (runAttrSpec attrs) []
+br attrs = mkVNode (Left "br") (mkObjWithProps attrs) []
 
 a :: AttributeSpec -> Array VNode -> VNode
-a attrs childNodes = mkVNode (Left "a") (runAttrSpec attrs) childNodes
+a attrs childNodes = mkVNode (Left "a") (mkObjWithProps attrs) childNodes
 
 a' :: AttributeSpec -> String -> VNode
-a' attrs text = mkTextVNode (Left "a") (runAttrSpec attrs) text
+a' attrs text = mkTextVNode (Left "a") (mkObjWithProps attrs) text
 
 div :: AttributeSpec -> Array VNode -> VNode
-div attrs childNodes = mkVNode (Left "div") (runAttrSpec attrs) childNodes
+div attrs childNodes = mkVNode (Left "div") (mkObjWithProps attrs) childNodes
 
 
 
@@ -101,19 +91,19 @@ div attrs childNodes = mkVNode (Left "div") (runAttrSpec attrs) childNodes
 ---------------------------------------------------------------
 
 button :: AttributeSpec -> Array VNode -> VNode
-button attrs childNodes = mkVNode (Left "button") (runAttrSpec attrs) childNodes
+button attrs childNodes = mkVNode (Left "button") (mkObjWithProps attrs) childNodes
 
 button' :: AttributeSpec -> String -> VNode
-button' attrs text = mkTextVNode (Left "button") (runAttrSpec attrs) text
+button' attrs text = mkTextVNode (Left "button") (mkObjWithProps attrs) text
 
 select :: AttributeSpec -> Array VNode -> VNode
-select attrs childNodes = mkVNode (Left "select") (runAttrSpec attrs) childNodes
+select attrs childNodes = mkVNode (Left "select") (mkObjWithProps attrs) childNodes
 
 option :: AttributeSpec -> String -> VNode
-option attrs text = mkTextVNode (Left "option") (runAttrSpec attrs) text
+option attrs text = mkTextVNode (Left "option") (mkObjWithProps attrs) text
 
 input :: AttributeSpec -> VNode
-input attrs = mkVNode (Left "input") (runAttrSpec attrs) []
+input attrs = mkVNode (Left "input") (mkObjWithProps attrs) []
 
 
 
@@ -122,19 +112,19 @@ input attrs = mkVNode (Left "input") (runAttrSpec attrs) []
 ---------------------------------------------------------------
 
 svg :: AttributeSpec -> Array VNode -> VNode
-svg attrs childNodes = mkVNode (Left "svg") (runAttrSpec (["xmlns" := "http://www.w3.org/2000/svg"] <> attrs)) childNodes
+svg attrs childNodes = mkVNode (Left "svg") (mkObjWithProps (["xmlns" := "http://www.w3.org/2000/svg"] <> attrs)) childNodes
 
 svgGroup :: AttributeSpec -> Array VNode -> VNode
-svgGroup attrs childNodes = mkVNode (Left "g") (runAttrSpec attrs) childNodes
+svgGroup attrs childNodes = mkVNode (Left "g") (mkObjWithProps attrs) childNodes
 
 svgText :: AttributeSpec -> String -> VNode
-svgText attrs text = mkTextVNode (Left "text") (runAttrSpec attrs) text
+svgText attrs text = mkTextVNode (Left "text") (mkObjWithProps attrs) text
 
 svgRect :: AttributeSpec -> VNode
-svgRect attrs = mkVNode (Left "rect") (runAttrSpec attrs) []
+svgRect attrs = mkVNode (Left "rect") (mkObjWithProps attrs) []
 
 svgCircle :: AttributeSpec -> VNode
-svgCircle attrs = mkVNode (Left "circle") (runAttrSpec attrs) []
+svgCircle attrs = mkVNode (Left "circle") (mkObjWithProps attrs) []
 
 svgLine :: AttributeSpec -> VNode
-svgLine attrs = mkVNode (Left "line") (runAttrSpec attrs) []
+svgLine attrs = mkVNode (Left "line") (mkObjWithProps attrs) []

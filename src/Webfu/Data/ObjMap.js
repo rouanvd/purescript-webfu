@@ -28,8 +28,8 @@ exports._lookupKey = function (no, yesF, key, obj) {
 };
 
 
-exports._insert = function (m, k, v) {
-  var mCopy = exports._copyEff( m )();
-  mCopy[k] = v;
-  return mCopy;
+exports._insert = function (k, v, obj) {
+  var objCopy = exports._copyEff( obj )();
+  objCopy[k] = v;
+  return objCopy;
 };
