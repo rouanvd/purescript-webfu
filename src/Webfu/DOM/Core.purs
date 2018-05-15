@@ -1,12 +1,16 @@
-module Webfu.DOM.Core (
-  class Convertible, convert,
-  DOM,
-  Node,
-  Window,
-  Document,
-  Element
-) where
+module Webfu.DOM.Core 
+  ( class Convertible, convert
+  , DOM
+  , Node
+  , Window
+  , Document
+  , Element
+  , TypeError
+  , typeError_message
+  , typeError_name
+  ) where
 
+import Data.Function.Uncurried (Fn1, runFn1)
 import Control.Monad.Eff (kind Effect)
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -33,3 +37,26 @@ instance convertable_Document_Node :: Convertible Document Node where
 instance convertable_Element_Node :: Convertible Element Node where
   convert e = unsafeCoerce e
 
+
+foreign import data TypeError :: Type
+
+foreign import typeError_message_ffi :: TypeError -> String
+typeError_message :: TypeError -> String
+typeError_message te = runFn1 typeError_message_ffi te
+
+foreign import typeError_name_ffi :: TypeError -> String
+typeError_name :: TypeError -> String
+typeError_name te = runFn1 typeError_name_ffi te
+
+-- typeError_fileName :: TypeError -> Maybe String
+-- 
+-- typeError_lineNumber :: TypeError -> Maybe Int
+
+
+
+--type TypeError = 
+--  { message    :: String
+--  , name       :: String
+--  , fileName   :: String
+--  , stack      :: String
+--  }
