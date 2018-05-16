@@ -23,6 +23,18 @@ exports.then_ffi = function(onSuccessF, promise) {
 };
 
 
+exports.then2_ffi = function(onSuccessF, promise) {
+  return function() { // Eff wrapper
+    var p = promise.then( function(value) {
+      var r = onSuccessF(value)(/*Eff*/);
+      return r;     
+    });
+
+    return p;
+  };
+};
+
+
 exports.catch_ffi = function(onRejectF, promise) {
   return function() { // Eff wrapper
     var p = promise.catch( function(err) { onRejectF(err)(/*Eff*/); } );

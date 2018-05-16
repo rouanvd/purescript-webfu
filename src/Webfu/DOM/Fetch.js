@@ -20,11 +20,8 @@ exports.responseStatusTextImpl = function(response) {
 
 
 exports.responseBodyAsTextImpl = function(response) {
-  var body = response.text();
-  if (body == null)
-    return "";
-
-  return body;
+  var responseText = response.text();
+  return responseText;
 };
 
 

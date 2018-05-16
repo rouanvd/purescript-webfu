@@ -10,8 +10,8 @@ import Control.Monad.Eff.Ref (Ref, newRef)
 import Webfu.Mithril (Component, mkComponent, raise)
 import Webfu.Mithril.HTML
 import Webfu.DOM (DOM, window, win_alert, typeError_message, typeError_name)
-import Webfu.DOM.Fetch (responseStatusText, win_fetch)
-import Webfu.DOM.Promise (Promise, mkPromise, then_, catch_, mkResolve, mkReject)
+import Webfu.DOM.Fetch (responseStatusText, responseBodyAsText, win_fetch)
+import Webfu.DOM.Promise (Promise, mkPromise, then_, then', catch_, mkResolve, mkReject)
 
 
 -----------------------------------------------------------
@@ -35,9 +35,10 @@ update ButtonClick st = do
   log "click baby!22"
   w <- window
 
-  _ <- (win_fetch "http://localhost:8080/test.html" w)
-       >>= (then_ (\r -> log ("Ok: " <> (responseStatusText r) )))
-       >>= (catch_ (\te -> log ("Err: " <> (typeError_message te) <> " :: " <> (typeError_name te))))
+  _ <- (win_fetch "http://localhost:8080/booya.html" w)
+       >>= (then' (\r -> pure $ responseBodyAsText r ))
+       >>= (then_ (\b -> log ("Ok: " )))
+--       >>= (catch_ (\te -> log ("Err: " <> (typeError_message te) <> " :: " <> (typeError_name te))))
   --     >>= (catch_ (\te -> log $ show te.))
   -- _ <- (mkPromise (\ resolveF rejectF -> rejectF "4"))
   --      >>= (then_ (\s -> log $ "ok: " <> s))

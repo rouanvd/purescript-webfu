@@ -4,14 +4,15 @@ module Webfu.DOM.Promise (
   mkResolve,
   mkReject,
   then_,
+  then',
   catch_,
   finally_,
   race,
   all
 ) where
 
-import Prelude
-import Control.Monad.Eff
+import Prelude (Unit)
+import Control.Monad.Eff (Eff)
 import Data.Function.Uncurried (Fn1, runFn1, Fn2, runFn2)
 import Webfu.DOM.Core (DOM)
 
@@ -69,6 +70,18 @@ then_ :: forall a b eff
       -> Eff (dom :: DOM | eff) (Promise a b)
 then_ = runFn2 then_ffi
 
+
+foreign import then2_ffi
+  :: forall a b c d eff
+   . Fn2 (a -> Eff eff (Promise c d))
+         (Promise a b)
+         (Eff (dom :: DOM | eff) (Promise c d))
+
+then' :: forall a b c d eff
+       . (a -> Eff eff (Promise c d))
+      -> Promise a b
+      -> Eff (dom :: DOM | eff) (Promise c d)
+then' = runFn2 then2_ffi
 
 
 --------------------------------------------------------------------------------
