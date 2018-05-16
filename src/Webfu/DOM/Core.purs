@@ -38,6 +38,10 @@ instance convertable_Element_Node :: Convertible Element Node where
   convert e = unsafeCoerce e
 
 
+
+--------------------------------------------------------------------------------
+-- TypeError
+--------------------------------------------------------------------------------
 foreign import data TypeError :: Type
 
 foreign import typeError_message_ffi :: TypeError -> String
@@ -48,15 +52,5 @@ foreign import typeError_name_ffi :: TypeError -> String
 typeError_name :: TypeError -> String
 typeError_name te = runFn1 typeError_name_ffi te
 
--- typeError_fileName :: TypeError -> Maybe String
--- 
--- typeError_lineNumber :: TypeError -> Maybe Int
 
 
-
---type TypeError = 
---  { message    :: String
---  , name       :: String
---  , fileName   :: String
---  , stack      :: String
---  }
