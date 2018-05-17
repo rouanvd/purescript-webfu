@@ -10,6 +10,7 @@ module Webfu.DOM.Fetch
 import Prelude (Unit)
 import Data.Function.Uncurried (Fn1, runFn1)
 import Control.Monad.Eff (kind Effect, Eff)
+import Webfu.Data.Err (Err(..))
 import Webfu.DOM.Core
 import Webfu.DOM.Promise (Promise)
 
@@ -31,15 +32,19 @@ foreign import responseStatusTextImpl :: Fn1 Response String
 responseStatusText :: Response -> String
 responseStatusText r = runFn1 responseStatusTextImpl r
 
-foreign import responseBodyAsTextImpl :: Fn1 Response (Promise String Unit)
-responseBodyAsText :: Response -> Promise String Unit
+foreign import responseBodyAsTextImpl :: Fn1 Response (Promise String Err)
+responseBodyAsText :: Response -> Promise String Err
 responseBodyAsText r = runFn1 responseBodyAsTextImpl r
 
 
 --------------------------------------------------------------------------------
 -- Fetch
 --------------------------------------------------------------------------------
-foreign import win_fetch_foreign :: forall eff. String -> Window -> Eff (dom :: DOM | eff) (Promise Response TypeError)
+foreign import win_fetch_foreign 
+  :: forall eff
+   .  String 
+  -> Window 
+  -> Eff (dom :: DOM | eff) (Promise Response TypeError)
 
 win_fetch :: forall eff. String -> Window -> Eff (dom :: DOM | eff) (Promise Response TypeError)
 win_fetch url w = win_fetch_foreign url w

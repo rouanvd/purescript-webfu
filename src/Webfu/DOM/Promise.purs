@@ -53,7 +53,6 @@ mkPromise
 mkPromise = runFn1 mkPromise_ffi
 
 
-
 --------------------------------------------------------------------------------
 -- then_
 --------------------------------------------------------------------------------
@@ -62,25 +61,29 @@ foreign import then_ffi
   :: forall a b eff
    . Fn2 (a -> Eff eff Unit)
          (Promise a b)
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Eff eff (Promise a b))
 
 then_ :: forall a b eff
        . (a -> Eff eff Unit)
       -> Promise a b
-      -> Eff (dom :: DOM | eff) (Promise a b)
+      -> Eff eff (Promise a b)
 then_ = runFn2 then_ffi
 
+
+--------------------------------------------------------------------------------
+-- then'
+--------------------------------------------------------------------------------
 
 foreign import then2_ffi
   :: forall a b c d eff
    . Fn2 (a -> Eff eff (Promise c d))
          (Promise a b)
-         (Eff (dom :: DOM | eff) (Promise c d))
+         (Eff eff (Promise c d))
 
 then' :: forall a b c d eff
        . (a -> Eff eff (Promise c d))
       -> Promise a b
-      -> Eff (dom :: DOM | eff) (Promise c d)
+      -> Eff eff (Promise c d)
 then' = runFn2 then2_ffi
 
 
@@ -92,12 +95,12 @@ foreign import catch_ffi
   :: forall a b eff
    . Fn2 (b -> Eff eff Unit)
          (Promise a b)
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Eff eff (Promise a b))
 
 catch_ :: forall a b eff
         . (b -> Eff eff Unit)
        -> Promise a b
-       -> Eff (dom :: DOM | eff) (Promise a b)
+       -> Eff eff (Promise a b)
 catch_ = runFn2 catch_ffi
 
 
@@ -110,12 +113,12 @@ foreign import finally_ffi
   :: forall a b eff
    . Fn2 (Unit -> Eff eff Unit)
          (Promise a b)
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Eff eff (Promise a b))
 
 finally_ :: forall a b eff
         . (Unit -> Eff eff Unit)
        -> Promise a b
-       -> Eff (dom :: DOM | eff) (Promise a b)
+       -> Eff eff (Promise a b)
 finally_ = runFn2 finally_ffi
 
 
@@ -125,13 +128,13 @@ finally_ = runFn2 finally_ffi
 --------------------------------------------------------------------------------
 
 foreign import mkReject_ffi
-  :: forall b eff
+  :: forall a b eff
    . Fn1 b
-         (Eff (dom :: DOM | eff) (Promise Unit b))
+         (Eff (dom :: DOM | eff) (Promise a b))
 
-mkReject :: forall b eff
+mkReject :: forall a b eff
           . b
-         -> Eff (dom :: DOM | eff) (Promise Unit b)
+         -> Eff (dom :: DOM | eff) (Promise a b)
 mkReject = runFn1 mkReject_ffi
 
 
@@ -141,13 +144,13 @@ mkReject = runFn1 mkReject_ffi
 --------------------------------------------------------------------------------
 
 foreign import mkResolve_ffi
-  :: forall a eff
+  :: forall a b eff
    . Fn1 a
-         (Eff (dom :: DOM | eff) (Promise a Unit))
+         (Eff (dom :: DOM | eff) (Promise a b))
 
-mkResolve :: forall a eff
+mkResolve :: forall a b eff
            . a
-          -> Eff (dom :: DOM | eff) (Promise a Unit)
+          -> Eff (dom :: DOM | eff) (Promise a b)
 mkResolve = runFn1 mkResolve_ffi
 
 
