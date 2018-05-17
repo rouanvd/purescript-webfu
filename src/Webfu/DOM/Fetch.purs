@@ -33,7 +33,7 @@ responseStatusText r = runFn1 responseStatusTextImpl r
 
 foreign import responseBodyAsTextImpl :: Fn1 Response (Promise String Unit)
 responseBodyAsText :: Response -> Promise String Unit
-responseBodyAsText r = runFn1 responseBodyAsText r
+responseBodyAsText r = runFn1 responseBodyAsTextImpl r
 
 
 --------------------------------------------------------------------------------
@@ -43,5 +43,3 @@ foreign import win_fetch_foreign :: forall eff. String -> Window -> Eff (dom :: 
 
 win_fetch :: forall eff. String -> Window -> Eff (dom :: DOM | eff) (Promise Response TypeError)
 win_fetch url w = win_fetch_foreign url w
-
-
