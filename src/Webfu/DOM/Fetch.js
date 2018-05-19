@@ -25,14 +25,28 @@ exports.responseBodyAsTextImpl = function(response) {
 };
 
 
+exports.mkHeadersImpl = function() {
+  var newHeaders = new Headers();
+  return newHeaders;
+};
+
+
+exports.headersAppendImpl = function(key, value, headers) {
+  headers.append( key, value );
+  return headers;
+};
+
+
 exports.win_fetch_foreign = function (url) {
-  return function (w) {
+  return function (options) {
+    return function (w) {
 
-    return function () { // Eff wrapper
-      var promise = w.fetch( url );
-      return promise;
+      return function () { // Eff wrapper
+        var promise = w.fetch( url, options );
+        return promise;
+      };
+
     };
-
   };
 };
 

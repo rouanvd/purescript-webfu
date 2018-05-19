@@ -7,6 +7,9 @@ module Webfu.Data.ObjMap
   , isEmpty
   , insert, (:=)
   , mkObjWithProps
+  , Options
+  , Option
+  , options
   ) where
 
 import Control.Monad.ST
@@ -19,7 +22,6 @@ import Control.Monad.Eff (Eff, runPure, foreachE)
 
 -- | `Obj` represents an object on which we can set properties & their values.
 foreign import data Obj :: Type
-
 
 foreign import _copyEff :: forall a b h r. a -> Eff (st :: ST h | r) b
 
@@ -60,6 +62,18 @@ isSubObj o1 o2 = allKeys (\key1 -> member key1 o2) o1
 -- | Test whether a map is empty
 isEmpty :: Obj -> Boolean
 isEmpty = allKeys (\_ -> false)
+
+
+
+type Options = Array (Obj -> Obj)
+
+type Option a = a -> Obj -> Obj
+
+options :: Array (Obj -> Obj) -> Obj
+options = mkObjWithProps
+
+
+
 
 
 
