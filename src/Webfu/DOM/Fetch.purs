@@ -4,6 +4,7 @@ module Webfu.DOM.Fetch
   , responseStatus
   , responseStatusText
   , responseBodyAsText
+  , responseBodyAsJson
   , Headers
   , mkHeaders
   , headersAppend
@@ -14,6 +15,7 @@ module Webfu.DOM.Fetch
 
 import Prelude (Unit)
 import Data.Function.Uncurried (Fn0, runFn0, Fn1, runFn1, Fn3, runFn3)
+import Data.Foreign (Foreign)
 import Control.Monad.Eff (kind Effect, Eff)
 import Webfu.Data.Err (Err(..))
 import Webfu.Data.ObjMap (Obj, Options, Option, options, (:=), empty)
@@ -41,6 +43,10 @@ responseStatusText r = runFn1 responseStatusTextImpl r
 foreign import responseBodyAsTextImpl :: Fn1 Response (Promise String Err)
 responseBodyAsText :: Response -> Promise String Err
 responseBodyAsText r = runFn1 responseBodyAsTextImpl r
+
+foreign import responseBodyAsJsonImpl :: Fn1 Response (Promise Foreign Err)
+responseBodyAsJson :: Response -> Promise Foreign Err
+responseBodyAsJson r = runFn1 responseBodyAsJsonImpl r
 
 
 --------------------------------------------------------------------------------

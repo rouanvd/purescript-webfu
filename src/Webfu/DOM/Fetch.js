@@ -21,7 +21,19 @@ exports.responseStatusTextImpl = function(response) {
 
 exports.responseBodyAsTextImpl = function(response) {
   var responseText = response.text();
+  if (responseText == null)
+    return "";
+
   return responseText;
+};
+
+
+exports.responseBodyAsJsonImpl = function(response) {
+  var responseJson = response.json();
+  if (responseJson == null)
+    return {};
+
+  return responseJson;
 };
 
 
