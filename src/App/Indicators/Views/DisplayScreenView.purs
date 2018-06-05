@@ -29,7 +29,9 @@ import App.Indicators.Views.Indicators (indRender)
 -----------------------------------------------------------
 -- UPDATE
 -----------------------------------------------------------
-data Msg = LoadIndicators
+data Msg
+  = LoadIndicators
+  | IncrementValues
   -- = IncrementValues
   -- | AlertDomValues
   -- | SetIndicatorValue
@@ -37,10 +39,11 @@ data Msg = LoadIndicators
   -- | DecreaseZoom
 
 update :: Msg -> DisplayScreenPresenter -> Effect DisplayScreenPresenter
--- update IncrementValues st = do
---   let updatedIndicators = map (indIncValues 1.0) st.indicators
---   pure $ st { indicators = updatedIndicators }
---
+update IncrementValues p = do
+  incrementIndicatorValues p
+  pure p
+
+
 update LoadIndicators p =
   loadIndicators p
   >>= (then_ (\_ -> redraw))
@@ -97,7 +100,7 @@ mkView presenter =
     pure $ main [] [
       h1' ["style":="color:red;"] "Bukela",
       --mcomp (HWComponent.mkView { name: "RvD" }),
-      -- button' ["onclick":= \_ -> raiseEvent stRef IncrementValues] "++",
+      button' ["onclick":= \_ -> raiseEvent stRef IncrementValues] "++",
       button' ["onclick":= \_ -> raiseEvent stRef LoadIndicators] "??",
       -- select ["id":="indicatorName"] (map (\ind -> option ["value":= indId ind] (indId ind)) st.indicators),
       -- input ["type":= "text", "id":= "newIndicatorValue", "style":="width:450px"],

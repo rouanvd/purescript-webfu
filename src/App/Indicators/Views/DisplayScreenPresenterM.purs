@@ -4,6 +4,7 @@ module App.Indicators.Views.DisplayScreenPresenterM
 , mkDisplayScreenPresenter
 , model
 , loadIndicators
+, incrementIndicatorValues
 ) where
 
 import Prelude
@@ -14,14 +15,14 @@ import Data.Either
 import Data.List.Types
 import Effect (Effect)
 import Effect.Ref (Ref)
-import Effect.Ref (new, read, write) as Ref
+import Effect.Ref (new, read, write, modify_) as Ref
 import Foreign (Foreign, F, ForeignError(..), readInt, readNumber, readString, readArray, unsafeFromForeign, fail)
 import Foreign.Index ((!))
 import Webfu.DOM (window)
 import Webfu.DOM.Fetch (win_fetch, responseBodyAsJson, responseOk)
 import Webfu.DOM.Promise (Promise, then_, then', catch_, mkReject, mkResolve)
 import Webfu.Data.Err (Err(..))
-import App.Indicators.Models (BooleanIndProperties, GuageIndProperties, Indicator(..), LabelIndProperties, Orientation(..))
+import App.Indicators.Models (BooleanIndProperties, GuageIndProperties, Indicator(..), LabelIndProperties, Orientation(..), indIncValues)
 
 
 
@@ -71,6 +72,15 @@ loadIndicators pr = do
        -- >>= (then_ (\b -> log ("Ok: " <> (show $ toPoints b))))
        -- >>= (catch_ (\s -> log $ "err: " <> (show s)))
   pure p
+
+
+incrementIndicatorValues :: DisplayScreenPresenter -> Effect Unit
+incrementIndicatorValues pr = do
+  Ref.modify_ (\m -> m { indicators = map (indIncValues 1.0) m.indicators }) (pr.model)
+  -- m <- model pr
+  -- map (indIncValues 1.0) st.indicators
+  -- pure $ st { indicators = updatedIndicators }
+
 
 
 readIndicatorsAlwaysValid :: Foreign -> Array Indicator
