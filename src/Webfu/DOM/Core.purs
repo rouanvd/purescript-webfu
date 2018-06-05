@@ -1,6 +1,5 @@
-module Webfu.DOM.Core 
+module Webfu.DOM.Core
   ( class Convertible, convert
-  , DOM
   , Node
   , Window
   , Document
@@ -11,15 +10,12 @@ module Webfu.DOM.Core
   ) where
 
 import Data.Function.Uncurried (Fn1, runFn1)
-import Control.Monad.Eff (kind Effect)
 import Unsafe.Coerce (unsafeCoerce)
 
 
 -- https://dontcallmedom.github.io/webidlpedia/inheritance.html
 -- https://developer.mozilla.org/en-US/docs/Web/API
 
-
-foreign import data DOM :: Effect
 
 foreign import data Window :: Type
 
@@ -51,6 +47,3 @@ typeError_message te = runFn1 typeError_message_ffi te
 foreign import typeError_name_ffi :: TypeError -> String
 typeError_name :: TypeError -> String
 typeError_name te = runFn1 typeError_name_ffi te
-
-
-

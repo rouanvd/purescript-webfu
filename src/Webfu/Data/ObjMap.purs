@@ -16,14 +16,13 @@ import Control.Monad.ST
 import Data.Array (foldl)
 import Data.Function.Uncurried
 import Prelude
-
-import Control.Monad.Eff (Eff, runPure, foreachE)
+import Effect (Effect)
 
 
 -- | `Obj` represents an object on which we can set properties & their values.
 foreign import data Obj :: Type
 
-foreign import _copyEff :: forall a b h r. a -> Eff (st :: ST h | r) b
+foreign import _copyEff :: forall a b. a -> Effect b
 
 -- | An empty map
 foreign import empty :: Obj
@@ -44,7 +43,7 @@ insert key val obj = runFn3 _insert key val obj
 infixl 5 insert as :=
 
 
--- | 
+-- |
 mkObjWithProps :: Array (Obj -> Obj) -> Obj
 mkObjWithProps setters = foldl (\obj insertF -> insertF obj) empty setters
 
@@ -71,9 +70,3 @@ type Option a = a -> Obj -> Obj
 
 options :: Array (Obj -> Obj) -> Obj
 options = mkObjWithProps
-
-
-
-
-
-

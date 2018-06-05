@@ -14,7 +14,7 @@ module Webfu.DOM (
 
 import Prelude (Unit, unit, ($))
 import Data.Maybe
-import Control.Monad.Eff (kind Effect, Eff)
+import Effect (Effect)
 import Unsafe.Coerce (unsafeCoerce)
 import Webfu.DOM.Core
 import Webfu.DOM.Promise (Promise)
@@ -67,11 +67,11 @@ nodeParentElement n = nodeParentElement_foreign Nothing Just n
 -- WINDOW
 ---------------------------------------------------------------
 
-foreign import window :: forall eff. Eff (dom :: DOM | eff) Window
+foreign import window :: Effect Window
 
 
-foreign import win_alert_foreign :: forall eff. Unit -> String -> Window -> Eff (dom :: DOM | eff) Unit
-win_alert :: forall eff. String -> Window -> Eff (dom :: DOM | eff) Unit
+foreign import win_alert_foreign :: Unit -> String -> Window -> Effect Unit
+win_alert :: String -> Window -> Effect Unit
 win_alert msg w = win_alert_foreign unit msg w
 
 
@@ -79,14 +79,14 @@ win_alert msg w = win_alert_foreign unit msg w
 -- DOCUMENT
 ---------------------------------------------------------------
 
-foreign import document :: forall eff. Eff (dom :: DOM | eff) Document
+foreign import document :: Effect Document
 
-foreign import doc_getElementById_foreign :: forall a eff. Maybe a -> (a -> Maybe a) -> String -> Eff (dom :: DOM | eff) (Maybe Element)
-doc_getElementById :: forall eff. String -> Eff (dom :: DOM | eff) (Maybe Element)
+foreign import doc_getElementById_foreign :: forall a. Maybe a -> (a -> Maybe a) -> String -> Effect (Maybe Element)
+doc_getElementById :: String -> Effect (Maybe Element)
 doc_getElementById id = doc_getElementById_foreign Nothing Just id
 
-foreign import doc_querySelector_foreign :: forall a eff. Maybe a -> (a -> Maybe a) -> String -> Eff (dom :: DOM | eff) (Maybe Element)
-doc_querySelector :: forall eff. String -> Eff (dom :: DOM | eff) (Maybe Element)
+foreign import doc_querySelector_foreign :: forall a. Maybe a -> (a -> Maybe a) -> String -> Effect (Maybe Element)
+doc_querySelector :: String -> Effect (Maybe Element)
 doc_querySelector id = doc_querySelector_foreign Nothing Just id
 
 
@@ -103,8 +103,8 @@ foreign import elem_attr_foreign :: forall a. Maybe a -> (a -> Maybe a) -> Strin
 elem_attr :: String -> Element -> Maybe String
 elem_attr attrName e  = elem_attr_foreign Nothing Just attrName e
 
-foreign import el_setAttr_foreign :: Unit -> String -> String -> Element -> Eff (dom :: DOM) Unit
-el_setAttr :: String -> String -> Element -> Eff (dom :: DOM) Unit
+foreign import el_setAttr_foreign :: Unit -> String -> String -> Element -> Effect Unit
+el_setAttr :: String -> String -> Element -> Effect Unit
 el_setAttr attrName attrVal e  = el_setAttr_foreign unit attrName attrVal e
 
 

@@ -1,16 +1,15 @@
 module Main where
 
 import Prelude
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE)
+import Effect (Effect)
 import Data.Maybe (fromJust)
-import Data.StrMap (StrMap, empty, insert)
+import Foreign.Object (Object, empty, insert)
 import Partial.Unsafe (unsafePartial)
-import Webfu.DOM (DOM, doc_querySelector)
+import Webfu.DOM (doc_querySelector)
 import Webfu.Mithril (Component, route) as M
 
-import Views.Welcome (mkView, state) as WelcomeView
-import Views.Bukela (mkView, state) as BukelaView
+import App.Indicators.Views.DisplayScreenView as DisplayScreenViewDisplayScreenView
+import App.Indicators.Views.DisplayScreenPresenterM
 
 -- import DOM.HTML (window) as DOM
 -- import DOM.HTML.Window (document) as DOM
@@ -21,14 +20,16 @@ import Views.Bukela (mkView, state) as BukelaView
 -- newtype Person = Person { name :: String, age :: Int }
 -- derive instance genericPerson :: Generic Person
 
-main :: forall e. Eff (console :: CONSOLE, dom :: DOM | e) Unit
+main :: Effect Unit
 main = do
   body <- unsafePartial $ fromJust <$> doc_querySelector( "body" )
-  M.route body "/Welcome" routes
+  rs <- routes
+  M.route body "/Welcome" rs
   where
-    routes :: StrMap M.Component
-    routes = empty # insert "/Welcome" (WelcomeView.mkView WelcomeView.state)
-                   # insert "/Bukela" (BukelaView.mkView BukelaView.state)
+    routes :: Effect (Object M.Component)
+    routes = do
+      p <- mkDisplayScreenPresenter {indicators:[]}
+      pure $ empty # insert "/Welcome" (DisplayScreenViewDisplayScreenView.mkView p)
   -- M.render body [M.mkTextVNode (Left "div#hw") {style:"color:red;"} "hello world"]
 
 

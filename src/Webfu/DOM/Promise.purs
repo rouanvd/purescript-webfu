@@ -12,9 +12,9 @@ module Webfu.DOM.Promise (
 ) where
 
 import Prelude (Unit)
-import Control.Monad.Eff (Eff)
+import Effect (Effect)
 import Data.Function.Uncurried (Fn1, runFn1, Fn2, runFn2)
-import Webfu.DOM.Core (DOM)
+
 
 foreign import data Promise :: Type -> Type -> Type
 
@@ -24,16 +24,16 @@ foreign import data Promise :: Type -> Type -> Type
 --------------------------------------------------------------------------------
 
 foreign import mkPromise_ffi
-  :: forall eff a b
-   . Fn1 ((a -> Eff eff Unit) -> (b -> Eff eff Unit) -> Eff eff Unit)
-         (Eff (dom :: DOM | eff) (Promise a b))
+  :: forall a b
+   . Fn1 ((a -> Effect Unit) -> (b -> Effect Unit) -> Effect Unit)
+         (Effect (Promise a b))
 
 -- | Creates a new Promise, accepting an *executor* function.
--- | 
+-- |
 -- | The *executor* function accepts 2 functions as arguments:
 -- |  - resolve: a function that resolves the promise with a success value.
 -- |  - reject: a function that rejects the promise with an error value.
--- | 
+-- |
 -- | The executor function normally performs some asynchronouse work, and is immediately executed by the
 -- | Promise implementation.  If the async operation was successful, we use the `resolve` function to
 -- | signal this, supplying a success value.  If the async operation failed, we use the `reject` function
@@ -47,9 +47,9 @@ foreign import mkPromise_ffi
 -- |              else resolveF jsonValue )
 -- | ```
 mkPromise
-  :: forall eff a b
-   . ((a -> Eff eff Unit) -> (b -> Eff eff Unit) -> Eff eff Unit)
-  -> Eff (dom :: DOM | eff) (Promise a b)
+  :: forall a b
+   . ((a -> Effect Unit) -> (b -> Effect Unit) -> Effect Unit)
+  -> Effect (Promise a b)
 mkPromise = runFn1 mkPromise_ffi
 
 
@@ -58,15 +58,15 @@ mkPromise = runFn1 mkPromise_ffi
 --------------------------------------------------------------------------------
 
 foreign import then_ffi
-  :: forall a b eff
-   . Fn2 (a -> Eff eff Unit)
+  :: forall a b
+   . Fn2 (a -> Effect Unit)
          (Promise a b)
-         (Eff eff (Promise a b))
+         (Effect (Promise a b))
 
-then_ :: forall a b eff
-       . (a -> Eff eff Unit)
+then_ :: forall a b
+       . (a -> Effect Unit)
       -> Promise a b
-      -> Eff eff (Promise a b)
+      -> Effect (Promise a b)
 then_ = runFn2 then_ffi
 
 
@@ -75,15 +75,15 @@ then_ = runFn2 then_ffi
 --------------------------------------------------------------------------------
 
 foreign import then2_ffi
-  :: forall a b c d eff
-   . Fn2 (a -> Eff eff (Promise c d))
+  :: forall a b c d
+   . Fn2 (a -> Effect (Promise c d))
          (Promise a b)
-         (Eff eff (Promise c d))
+         (Effect (Promise c d))
 
-then' :: forall a b c d eff
-       . (a -> Eff eff (Promise c d))
+then' :: forall a b c d
+       . (a -> Effect (Promise c d))
       -> Promise a b
-      -> Eff eff (Promise c d)
+      -> Effect (Promise c d)
 then' = runFn2 then2_ffi
 
 
@@ -92,15 +92,15 @@ then' = runFn2 then2_ffi
 --------------------------------------------------------------------------------
 
 foreign import catch_ffi
-  :: forall a b eff
-   . Fn2 (b -> Eff eff Unit)
+  :: forall a b
+   . Fn2 (b -> Effect Unit)
          (Promise a b)
-         (Eff eff (Promise a b))
+         (Effect (Promise a b))
 
 catch_ :: forall a b eff
-        . (b -> Eff eff Unit)
+        . (b -> Effect Unit)
        -> Promise a b
-       -> Eff eff (Promise a b)
+       -> Effect (Promise a b)
 catch_ = runFn2 catch_ffi
 
 
@@ -110,15 +110,15 @@ catch_ = runFn2 catch_ffi
 --------------------------------------------------------------------------------
 
 foreign import finally_ffi
-  :: forall a b eff
-   . Fn2 (Unit -> Eff eff Unit)
+  :: forall a b
+   . Fn2 (Unit -> Effect Unit)
          (Promise a b)
-         (Eff eff (Promise a b))
+         (Effect (Promise a b))
 
-finally_ :: forall a b eff
-        . (Unit -> Eff eff Unit)
+finally_ :: forall a b
+        . (Unit -> Effect Unit)
        -> Promise a b
-       -> Eff eff (Promise a b)
+       -> Effect (Promise a b)
 finally_ = runFn2 finally_ffi
 
 
@@ -128,13 +128,13 @@ finally_ = runFn2 finally_ffi
 --------------------------------------------------------------------------------
 
 foreign import mkReject_ffi
-  :: forall a b eff
+  :: forall a b
    . Fn1 b
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Effect (Promise a b))
 
-mkReject :: forall a b eff
+mkReject :: forall a b
           . b
-         -> Eff (dom :: DOM | eff) (Promise a b)
+         -> Effect (Promise a b)
 mkReject = runFn1 mkReject_ffi
 
 
@@ -144,13 +144,13 @@ mkReject = runFn1 mkReject_ffi
 --------------------------------------------------------------------------------
 
 foreign import mkResolve_ffi
-  :: forall a b eff
+  :: forall a b
    . Fn1 a
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Effect (Promise a b))
 
-mkResolve :: forall a b eff
+mkResolve :: forall a b
            . a
-          -> Eff (dom :: DOM | eff) (Promise a b)
+          -> Effect (Promise a b)
 mkResolve = runFn1 mkResolve_ffi
 
 
@@ -160,13 +160,13 @@ mkResolve = runFn1 mkResolve_ffi
 --------------------------------------------------------------------------------
 
 foreign import race_ffi
-  :: forall a b eff
+  :: forall a b
    . Fn1 (Array (Promise a b))
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Effect (Promise a b))
 
-race :: forall a b eff
+race :: forall a b
       . Array (Promise a b)
-     -> Eff (dom :: DOM | eff) (Promise a b)
+     -> Effect (Promise a b)
 race = runFn1 race_ffi
 
 
@@ -176,12 +176,11 @@ race = runFn1 race_ffi
 --------------------------------------------------------------------------------
 
 foreign import all_ffi
-  :: forall a b eff
+  :: forall a b
    . Fn1 (Array (Promise a b))
-         (Eff (dom :: DOM | eff) (Promise a b))
+         (Effect (Promise a b))
 
-all :: forall a b eff
+all :: forall a b
      . Array (Promise a b)
-    -> Eff (dom :: DOM | eff) (Promise a b)
+    -> Effect (Promise a b)
 all = runFn1 all_ffi
-

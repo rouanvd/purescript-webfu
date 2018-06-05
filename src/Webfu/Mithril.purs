@@ -14,7 +14,7 @@ module Webfu.Mithril (
   raise,
   mount,
   route,
-  
+
   parseQueryString,
   buildQueryString,
   redraw,
@@ -26,12 +26,13 @@ import Prelude (class Show, Unit, unit, ($))
 import Data.Function.Uncurried (Fn1, runFn1, Fn3, runFn3, Fn4, runFn4, Fn5, runFn5, Fn6, runFn6)
 import Data.Maybe
 import Data.Either (Either(..), fromLeft, fromRight, isLeft)
-import Data.StrMap (StrMap)
-import Control.Monad.Eff.Ref (REF, Ref, writeRef, readRef, newRef)
+import Foreign.Object (Object)
 import Partial.Unsafe (unsafePartial)
-import Control.Monad.Eff (kind Effect, Eff)
+import Effect (Effect)
+import Effect.Ref (Ref)
+import Effect.Ref (write, read, new) as RefM
 import Webfu.Data.ObjMap (Obj)
-import Webfu.DOM (DOM, Element)
+import Webfu.DOM (Element)
 
 type Attributes = Obj
 
@@ -79,17 +80,18 @@ mkTextVNode selector attrs childNodes = runFn6 (mkVNode_foreign) isLeft (unsafeP
 
 foreign import data Component :: Type
 
-foreign import mkComponent_foreign :: forall s eff. Fn5
-                                      (s -> Eff (ref :: REF | eff) (Ref s))
-                                      (Ref s -> Eff (ref :: REF | eff) s)
-                                      (Ref s -> s -> Eff (ref :: REF | eff) Unit)
+
+foreign import mkComponent_foreign :: forall s. Fn5
+                                      (s -> Effect (Ref s))
+                                      (Ref s -> Effect s)
+                                      (s -> Ref s -> Effect Unit)
                                       s
-                                      (Ref s -> s -> VNode -> VNode)
+                                      (Ref s -> s -> VNode -> Effect VNode)
                                       Component
 
 -- | Creates a new Component which uses the supplied view function.
-mkComponent :: forall s. s -> (Ref s -> s -> VNode -> VNode) -> Component
-mkComponent state viewF = runFn5 (mkComponent_foreign) (newRef) (readRef) (writeRef) state viewF
+mkComponent :: forall s. s -> (Ref s -> s -> VNode -> Effect VNode) -> Component
+mkComponent state viewF = runFn5 (mkComponent_foreign) (RefM.new) (RefM.read) (RefM.write) state viewF
 
 
 foreign import mkComponentVNode_foreign :: Fn1 Component VNode
@@ -97,84 +99,83 @@ mkComponentVNode :: Component -> VNode
 mkComponentVNode component = runFn1 mkComponentVNode_foreign component
 
 
-foreign import onInit_foreign :: forall s eff. Fn4 Unit (Ref s -> Eff (ref :: REF | eff) s) Component (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) Component
-onInit :: forall s eff. (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) -> Component -> Component
-onInit initF component = runFn4 onInit_foreign unit readRef component initF
+foreign import onInit_foreign :: forall s. Fn4 Unit (Ref s -> Effect s) Component (Ref s -> s -> VNode -> Effect Unit) Component
+onInit :: forall s. (Ref s -> s -> VNode -> Effect Unit) -> Component -> Component
+onInit initF component = runFn4 onInit_foreign unit RefM.read component initF
 
 
-foreign import onCreate_foreign :: forall s eff. Fn4 Unit (Ref s -> Eff (ref :: REF | eff) s) Component (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) Component
-onCreate :: forall s eff. (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) -> Component -> Component
-onCreate createF component = runFn4 onCreate_foreign unit readRef component createF
+foreign import onCreate_foreign :: forall s. Fn4 Unit (Ref s -> Effect s) Component (Ref s -> s -> VNode -> Effect Unit) Component
+onCreate :: forall s. (Ref s -> s -> VNode -> Effect Unit) -> Component -> Component
+onCreate createF component = runFn4 onCreate_foreign unit RefM.read component createF
 
 
-foreign import onBeforeUpdate_foreign :: forall s eff. Fn4 Unit (Ref s -> Eff (ref :: REF | eff) s) Component (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) Component
-onBeforeUpdate :: forall s eff. (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) -> Component -> Component
-onBeforeUpdate beforeUpdateF component = runFn4 onUpdate_foreign unit readRef component beforeUpdateF
+foreign import onBeforeUpdate_foreign :: forall s. Fn4 Unit (Ref s -> Effect s) Component (Ref s -> s -> VNode -> Effect Unit) Component
+onBeforeUpdate :: forall s. (Ref s -> s -> VNode -> Effect Unit) -> Component -> Component
+onBeforeUpdate beforeUpdateF component = runFn4 onUpdate_foreign unit RefM.read component beforeUpdateF
 
 
-foreign import onUpdate_foreign :: forall s eff. Fn4 Unit (Ref s -> Eff (ref :: REF | eff) s) Component (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) Component
-onUpdate :: forall s eff. (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) -> Component -> Component
-onUpdate updateF component = runFn4 onUpdate_foreign unit readRef component updateF
+foreign import onUpdate_foreign :: forall s. Fn4 Unit (Ref s -> Effect s) Component (Ref s -> s -> VNode -> Effect Unit) Component
+onUpdate :: forall s. (Ref s -> s -> VNode -> Effect Unit) -> Component -> Component
+onUpdate updateF component = runFn4 onUpdate_foreign unit RefM.read component updateF
 
 
-foreign import onBeforeRemove_foreign :: forall s eff. Fn4 Unit (Ref s -> Eff (ref :: REF | eff) s) Component (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) Component
-onBeforeRemove :: forall s eff. (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) -> Component -> Component
-onBeforeRemove beforeRemoveF component = runFn4 onBeforeRemove_foreign unit readRef component beforeRemoveF
+foreign import onBeforeRemove_foreign :: forall s. Fn4 Unit (Ref s -> Effect s) Component (Ref s -> s -> VNode -> Effect Unit) Component
+onBeforeRemove :: forall s. (Ref s -> s -> VNode -> Effect Unit) -> Component -> Component
+onBeforeRemove beforeRemoveF component = runFn4 onBeforeRemove_foreign unit RefM.read component beforeRemoveF
 
 
-foreign import onRemove_foreign :: forall s eff. Fn4 Unit (Ref s -> Eff (ref :: REF | eff) s) Component (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) Component
-onRemove :: forall s eff. (Ref s -> s -> VNode -> Eff (dom :: DOM | eff) Unit) -> Component -> Component
-onRemove removeF component = runFn4 onRemove_foreign unit readRef component removeF
+foreign import onRemove_foreign :: forall s. Fn4 Unit (Ref s -> Effect s) Component (Ref s -> s -> VNode -> Effect Unit) Component
+onRemove :: forall s. (Ref s -> s -> VNode -> Effect Unit) -> Component -> Component
+onRemove removeF component = runFn4 onRemove_foreign unit RefM.read component removeF
 
 
 ---------------------------------------------------------------
 -- EVENTS
 ---------------------------------------------------------------
 
-foreign import raise_foreign :: forall m s eff. Fn6
+foreign import raise_foreign :: forall m s. Fn6
                                 Unit
-                                (Ref s -> Eff (ref :: REF | eff) s)
-                                (Ref s -> s -> Eff (ref :: REF | eff) Unit)
-                                (m -> s -> Eff eff s)
+                                (Ref s -> Effect s)
+                                (s -> Ref s -> Effect Unit)
+                                (m -> s -> Effect s)
                                 (Ref s)
                                 m
                                 Unit
 
-raise :: forall m s eff. (m -> s -> Eff eff s) -> Ref s -> m -> Unit
-raise updateF state msg = runFn6 (raise_foreign) unit readRef writeRef updateF state msg
+raise :: forall m s. (m -> s -> Effect s) -> Ref s -> m -> Unit
+raise updateF state msg = runFn6 (raise_foreign) unit RefM.read RefM.write updateF state msg
 
 
 ---------------------------------------------------------------
 -- MITHRIL CORE
 ---------------------------------------------------------------
 
-foreign import render_foreign :: forall eff.
-                                 Unit
+foreign import render_foreign :: Unit
                               -> (Either String (Array VNode) -> Boolean)
                               -> (Either String (Array VNode) -> String)
                               -> (Either String (Array VNode) -> Array VNode)
                               -> Element
                               -> Either String (Array VNode)
-                              -> Eff (dom :: DOM | eff) Unit
+                              -> Effect Unit
 
 -- | Renders a text node to the DOM
-renderText :: forall eff. Element -> String -> Eff (dom :: DOM | eff) Unit
+renderText :: Element -> String -> Effect Unit
 renderText elem vnodes = render_foreign unit isLeft (unsafePartial $ fromLeft) (unsafePartial $ fromRight) elem (Left vnodes)
 
 -- | Renders 1 or more VNodes to the DOM
-render :: forall eff. Element -> Array VNode -> Eff (dom :: DOM | eff) Unit
+render :: Element -> Array VNode -> Effect Unit
 render elem vnodes = render_foreign unit isLeft (unsafePartial $ fromLeft) (unsafePartial $ fromRight) elem (Right vnodes)
 
-foreign import mount_foreign :: forall eff. Fn3 Unit Element Component (Eff (dom :: DOM | eff) Unit)
-mount :: forall eff. Element -> Component -> Eff (dom :: DOM | eff) Unit
+foreign import mount_foreign :: Fn3 Unit Element Component (Effect Unit)
+mount :: Element -> Component -> Effect Unit
 mount elem component = runFn3 mount_foreign unit elem component
 
 -- foreign import unmount :: forall eff. Element -> Eff (dom :: DOM | eff) Unit
 
-foreign import route_foreign :: forall eff. Fn4 Unit Element String (StrMap Component) (Eff (dom :: DOM | eff) Unit)
+foreign import route_foreign :: Fn4 Unit Element String (Object Component) (Effect Unit)
 -- | Configures the navigation for your Mithril application.
 -- | You can only call `route` once per application.
-route :: forall eff. Element -> String -> StrMap Component -> Eff (dom :: DOM | eff) Unit
+route :: Element -> String -> Object Component -> Effect Unit
 route rootElem defaultRoute routes = runFn4 (route_foreign) unit rootElem defaultRoute routes
 
 
@@ -196,9 +197,9 @@ foreign import parseQueryString :: forall r. String -> {|r}
 -- | Turns an object into a string of form a=1&b=2
 foreign import buildQueryString :: forall r. {|r} -> String
 
-foreign import redraw_foreign :: forall eff. Unit -> Eff (dom :: DOM | eff) Unit
+foreign import redraw_foreign :: Unit -> Effect Unit
 -- | Updates the DOM after a change in the application data layer.
-redraw :: forall eff. Eff (dom :: DOM | eff) Unit
+redraw :: Effect Unit
 redraw = redraw_foreign unit
 
 -- | Turns an HTML string into unescaped HTML.

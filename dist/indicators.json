@@ -1,3 +1,4 @@
-[ {"x":10, "y":20}
-, {"x":40, "y":20}
+[ {"indType":"label", "id":"c1", "x":10, "y":20, "width":40, "height":10, "rotation":0.0, "scale":1.0, "orientation":"p", "values":[], "text":"Label Ctl 1", "fontSizeInPx":10.0 }
+, {"indType":"boolean", "id":"c2", "x":100, "y":20, "width":30, "height":70, "rotation":0.0, "scale":1.0, "orientation":"p", "values":[1.0], "onValue":"1.0", "onColor":"red", "offValue":"0.0", "offColor":"black" }
+, {"indType":"guage", "id":"c3", "x":200, "y":20, "width":30, "height":70, "rotation":0.0, "scale":1.0, "orientation":"p", "values":[2.0], "desc":"Guage Ctl 1", "maxValue":10.0 }
 ]

@@ -15,8 +15,8 @@ module Webfu.DOM.Fetch
 
 import Prelude (Unit)
 import Data.Function.Uncurried (Fn0, runFn0, Fn1, runFn1, Fn3, runFn3)
-import Data.Foreign (Foreign)
-import Control.Monad.Eff (kind Effect, Eff)
+import Foreign (Foreign)
+import Effect (Effect)
 import Webfu.Data.Err (Err(..))
 import Webfu.Data.ObjMap (Obj, Options, Option, options, (:=), empty)
 import Webfu.DOM.Core
@@ -83,7 +83,7 @@ type FetchOpts =
   }
 
 fetchOpts :: FetchOpts
-fetchOpts = 
+fetchOpts =
   { method: ("method" := _)
   , headers: ("headers" := _)
   , body: ("body" := _)
@@ -98,23 +98,15 @@ fetchOpts =
   }
 
 
-foreign import win_fetch_foreign 
+foreign import win_fetch_foreign
   :: forall eff
    . String
   -> Obj
-  -> Window 
-  -> Eff (dom :: DOM | eff) (Promise Response TypeError)
+  -> Window
+  -> Effect (Promise Response TypeError)
 
-win_fetch :: forall eff. String -> Window -> Eff (dom :: DOM | eff) (Promise Response TypeError)
+win_fetch :: forall eff. String -> Window -> Effect (Promise Response TypeError)
 win_fetch url w = win_fetch_foreign url empty w
 
-win_fetch' :: forall eff. String -> Options -> Window -> Eff (dom :: DOM | eff) (Promise Response TypeError)
+win_fetch' :: forall eff. String -> Options -> Window -> Effect (Promise Response TypeError)
 win_fetch' url opts w = win_fetch_foreign url (options opts) w
-
-
-
-
-
-
-
-

@@ -65,7 +65,7 @@ exports.mkComponent_foreign = function (newRefF, readRefF, writeRefF, state, vie
   newComponent.state = stateRef;
 
   newComponent.view = function(vnode) {
-    return viewF(vnode.state.state)(readRefF( vnode.state.state )(/*Eff*/))( vnode );
+    return viewF(vnode.state.state)(readRefF( vnode.state.state )(/*Eff*/))( vnode )(/*Eff*/);
   };
 
   return newComponent;
@@ -138,7 +138,7 @@ exports.onRemove_foreign = function (unitVal, readRefF, component, removeF) {
 exports.raise_foreign = function (unitVal, readRefF, writeRefF, updateF, mutableState, msg) {
   var currentState = readRefF( mutableState )(/*Eff*/);
   var updatedState = updateF( msg )( currentState )(/*Eff*/);
-  writeRefF( mutableState )( updatedState )(/*Eff*/);
+  writeRefF( updatedState )( mutableState )(/*Eff*/);
 
   return unitVal;
 };

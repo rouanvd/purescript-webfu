@@ -1,12 +1,12 @@
-module Webfu.Mithril.HTML 
+module Webfu.Mithril.HTML
   ( module Webfu.Mithril.HTML
   , module Webfu.Data.ObjMap
   )where
 
 import Data.Either
 import Data.Array (foldl)
-import Data.StrMap (StrMap)
-import Data.StrMap (empty, insert, fold) as StrMap
+import Foreign.Object (Object)
+import Foreign.Object (empty, insert, fold) as StrMap
 import Prelude (class Show, show, (<>), (#))
 import Webfu.Data.ObjMap (Obj, empty, (:=), mkObjWithProps)
 import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
@@ -25,7 +25,7 @@ type AttributeSpec = Array AttributeSetterF
 -- GENERIC STRING MAP BUILDER
 ---------------------------------------------------------------
 
-type StrMapSetterF = StrMap String -> StrMap String
+type StrMapSetterF = Object String -> Object String
 type StrMapSpec = Array StrMapSetterF
 
 strMapInsert :: forall a. String -> String -> StrMapSetterF
@@ -38,7 +38,7 @@ infixl 5 strMapInsert as :
 -- CSS BUILDER
 ---------------------------------------------------------------
 
-type CssRules = StrMap String
+type CssRules = Object String
 type CssRuleSetterF = CssRules -> CssRules
 type CssRuleSpec = Array CssRuleSetterF
 
