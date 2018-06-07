@@ -6,6 +6,7 @@ import Prelude
 import Effect (Effect)
 import Effect.Console (log)
 import Effect.Ref (Ref)
+import Effect.Ref (read, write) as Ref
 import Data.Array (find, findIndex, updateAt)
 import Data.Number as Number
 import Data.Maybe (Maybe(..), maybe)
@@ -13,17 +14,13 @@ import Webfu.DOM
 import Webfu.DOM.Promise
 import Webfu.Mithril (VNode, Component, mkComponent, raise, redraw)
 import Webfu.Mithril.HTML
-import App.Indicators.Views.DisplayScreenPresenterM
+import App.Indicators.Views.DisplayScreenPresenterM (DisplayScreenPresenter)
+import App.Indicators.Views.DisplayScreenPresenterM as Presenter
 import App.Indicators.Views.Indicators (indRender)
 
 -----------------------------------------------------------
 -- STATE
 -----------------------------------------------------------
-
--- type State = {indicators :: Array IndicatorCtl}
---
--- state :: State
--- state = {indicators: getIndicators unit}
 
 
 -----------------------------------------------------------
@@ -38,16 +35,16 @@ data Msg
   -- | IncreaseZoom
   -- | DecreaseZoom
 
-update :: Msg -> DisplayScreenPresenter -> Effect DisplayScreenPresenter
-update IncrementValues p = do
-  incrementIndicatorValues p
-  pure p
+update :: Ref DisplayScreenPresenter -> Msg -> Effect Unit
+update refP LoadIndicators = void $
+  Presenter.loadIndicators refP
+  >>= (thn_ (\_ -> redraw ))
 
 
-update LoadIndicators p =
-  loadIndicators p
-  >>= (then_ (\_ -> redraw))
-  >>= (\_ -> pure p)
+update refP IncrementValues =
+  Presenter.incrementIndicatorValues refP
+
+
 
 
   -- maybeFirstIndicator <- doc_querySelector $ "#" <> "C02Buffer" <> " .innerBox"
@@ -95,18 +92,18 @@ raiseEvent refSt = raise update refSt
 -- mkView :: forall eff. Unit -> Eff eff Component
 mkView :: DisplayScreenPresenter -> Component
 mkView presenter =
-  mkComponent presenter (\stRef st _ -> do
-    m <- model st
+  mkComponent presenter (\prRef _ -> do
+    p <- Ref.read prRef
     pure $ main [] [
       h1' ["style":="color:red;"] "Bukela",
       --mcomp (HWComponent.mkView { name: "RvD" }),
-      button' ["onclick":= \_ -> raiseEvent stRef IncrementValues] "++",
-      button' ["onclick":= \_ -> raiseEvent stRef LoadIndicators] "??",
+      button' ["onclick":= \_ -> raiseEvent prRef IncrementValues] "++",
+      button' ["onclick":= \_ -> raiseEvent prRef LoadIndicators] "??",
       -- select ["id":="indicatorName"] (map (\ind -> option ["value":= indId ind] (indId ind)) st.indicators),
       -- input ["type":= "text", "id":= "newIndicatorValue", "style":="width:450px"],
       -- button' ["onclick":= \_ -> raiseEvent stRef SetIndicatorValue] "!!",
       -- button' ["onclick":= \_ -> raiseEvent stRef IncreaseZoom] "Z+",
       -- button' ["onclick":= \_ -> raiseEvent stRef DecreaseZoom] "Z-",
       --br [],
-      svg ["id":="svg", "viewBox":="0 0 300 150"] (map indRender m.indicators)
+      svg ["id":="svg", "viewBox":="0 0 300 150"] (map indRender p.model.indicators)
       ])

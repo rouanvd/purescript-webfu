@@ -1,14 +1,14 @@
 'use strict';
 
-exports._copy = function (m) {
-  var r = {};
-  for (var k in m) {
-    if (hasOwnProperty.call(m, k)) {
-      r[k] = m[k];
-    }
-  }
-  return r;
-};
+// exports._copy = function (m) {
+//   var r = {};
+//   for (var k in m) {
+//     if (hasOwnProperty.call(m, k)) {
+//       r[k] = m[k];
+//     }
+//   }
+//   return r;
+// };
 
 
 exports.vnodeTag = function (vnode) {
@@ -65,7 +65,7 @@ exports.mkComponent_foreign = function (newRefF, readRefF, writeRefF, state, vie
   newComponent.state = stateRef;
 
   newComponent.view = function(vnode) {
-    return viewF(vnode.state.state)(readRefF( vnode.state.state )(/*Eff*/))( vnode )(/*Eff*/);
+    return viewF( vnode.state.state )( vnode )(/*Eff*/);
   };
 
   return newComponent;
@@ -136,10 +136,7 @@ exports.onRemove_foreign = function (unitVal, readRefF, component, removeF) {
 //---------------------------------------------------------------
 
 exports.raise_foreign = function (unitVal, readRefF, writeRefF, updateF, mutableState, msg) {
-  var currentState = readRefF( mutableState )(/*Eff*/);
-  var updatedState = updateF( msg )( currentState )(/*Eff*/);
-  writeRefF( updatedState )( mutableState )(/*Eff*/);
-
+  updateF( mutableState )( msg )(/*Eff*/);
   return unitVal;
 };
 

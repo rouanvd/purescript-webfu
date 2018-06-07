@@ -2,7 +2,6 @@ module App.Indicators.Views.DisplayScreenPresenterM
 ( DisplayScreenPresenter
 , State
 , mkDisplayScreenPresenter
-, model
 , loadIndicators
 , incrementIndicatorValues
 ) where
@@ -20,7 +19,7 @@ import Foreign (Foreign, F, ForeignError(..), readInt, readNumber, readString, r
 import Foreign.Index ((!))
 import Webfu.DOM (window)
 import Webfu.DOM.Fetch (win_fetch, responseBodyAsJson, responseOk)
-import Webfu.DOM.Promise (Promise, then_, then', catch_, mkReject, mkResolve)
+import Webfu.DOM.Promise (Promise, thn_, thn', catch_, mkReject, mkResolve)
 import Webfu.Data.Err (Err(..))
 import App.Indicators.Models (BooleanIndProperties, GuageIndProperties, Indicator(..), LabelIndProperties, Orientation(..), indIncValues)
 
@@ -34,53 +33,29 @@ type State = {indicators :: Array Indicator}
 
 
 type DisplayScreenPresenter =
-  { model :: Ref State
+  { model :: State
   }
 
 
-mkDisplayScreenPresenter :: State -> Effect DisplayScreenPresenter
-mkDisplayScreenPresenter initState = do
-  r <- Ref.new initState
-  pure { model: r }
+mkDisplayScreenPresenter :: State -> DisplayScreenPresenter
+mkDisplayScreenPresenter initState =
+  { model: initState }
 
 
-model :: DisplayScreenPresenter -> Effect State
-model p = Ref.read p.model
-
-
--- loadIndicators :: DisplayScreenPresenter -> Effect (Promise (Array Indicator) Err)
--- loadIndicators pr = do
---   w <- window
---   p <- (win_fetch "http://localhost:8080/indicators.json" w)
---        >>= (then' (\r -> if responseOk r
---                            then pure $ responseBodyAsJson r
---                            else mkReject (Err "bla bla")))
---        >>= (then' (\json -> mkResolve $ readIndicatorsAlwaysValid json))
---        -- >>= (then_ (\b -> log ("Ok: " <> (show $ toPoints b))))
---        -- >>= (catch_ (\s -> log $ "err: " <> (show s)))
---   pure p
-
-
-loadIndicators :: DisplayScreenPresenter -> Effect (Promise Foreign Err)
-loadIndicators pr = do
+loadIndicators :: Ref DisplayScreenPresenter -> Effect (Promise Unit Err)
+loadIndicators refPr = do
   w <- window
   p <- (win_fetch "http://localhost:8080/indicators.json" w)
-       >>= (then' (\r -> if responseOk r
-                           then pure $ responseBodyAsJson r
-                           else mkReject (Err "bla bla")))
-       >>= (then_ (\json -> Ref.write { indicators: readIndicatorsAlwaysValid json } pr.model))
-       -- >>= (then_ (\b -> log ("Ok: " <> (show $ toPoints b))))
-       -- >>= (catch_ (\s -> log $ "err: " <> (show s)))
+       >>= (thn' (\rqst -> if responseOk rqst
+                             then pure $ responseBodyAsJson rqst
+                             else mkReject (Err "bla bla")))
+       >>= (thn_ (\json -> Ref.write { model: { indicators: readIndicatorsAlwaysValid json }} refPr))
   pure p
 
 
-incrementIndicatorValues :: DisplayScreenPresenter -> Effect Unit
-incrementIndicatorValues pr = do
-  Ref.modify_ (\m -> m { indicators = map (indIncValues 1.0) m.indicators }) (pr.model)
-  -- m <- model pr
-  -- map (indIncValues 1.0) st.indicators
-  -- pure $ st { indicators = updatedIndicators }
-
+incrementIndicatorValues :: Ref DisplayScreenPresenter -> Effect Unit
+incrementIndicatorValues refPr =
+  Ref.modify_ (\pr -> pr { model { indicators = map (indIncValues 1.0) pr.model.indicators }}) refPr
 
 
 readIndicatorsAlwaysValid :: Foreign -> Array Indicator

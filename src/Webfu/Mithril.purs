@@ -86,11 +86,11 @@ foreign import mkComponent_foreign :: forall s. Fn5
                                       (Ref s -> Effect s)
                                       (s -> Ref s -> Effect Unit)
                                       s
-                                      (Ref s -> s -> VNode -> Effect VNode)
+                                      (Ref s -> VNode -> Effect VNode)
                                       Component
 
 -- | Creates a new Component which uses the supplied view function.
-mkComponent :: forall s. s -> (Ref s -> s -> VNode -> Effect VNode) -> Component
+mkComponent :: forall s. s -> (Ref s -> VNode -> Effect VNode) -> Component
 mkComponent state viewF = runFn5 (mkComponent_foreign) (RefM.new) (RefM.read) (RefM.write) state viewF
 
 
@@ -137,12 +137,12 @@ foreign import raise_foreign :: forall m s. Fn6
                                 Unit
                                 (Ref s -> Effect s)
                                 (s -> Ref s -> Effect Unit)
-                                (m -> s -> Effect s)
+                                (Ref s -> m -> Effect Unit)
                                 (Ref s)
                                 m
                                 Unit
 
-raise :: forall m s. (m -> s -> Effect s) -> Ref s -> m -> Unit
+raise :: forall m s. (Ref s -> m -> Effect Unit) -> Ref s -> m -> Unit
 raise updateF state msg = runFn6 (raise_foreign) unit RefM.read RefM.write updateF state msg
 
 

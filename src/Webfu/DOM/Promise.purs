@@ -1,17 +1,18 @@
-module Webfu.DOM.Promise (
-  Promise,
-  mkPromise,
-  mkResolve,
-  mkReject,
-  then_,
-  then',
-  catch_,
-  finally_,
-  race,
-  all
+module Webfu.DOM.Promise
+( Promise
+, mkPromise
+, mkResolve
+, mkReject
+, thn
+, thn'
+, thn_
+, catch_
+, finally_
+, race
+, all
 ) where
 
-import Prelude (Unit)
+import Prelude (Unit, unit, bind, (>>=), pure)
 import Effect (Effect)
 import Data.Function.Uncurried (Fn1, runFn1, Fn2, runFn2)
 
@@ -23,7 +24,7 @@ foreign import data Promise :: Type -> Type -> Type
 -- mkPromise
 --------------------------------------------------------------------------------
 
-foreign import mkPromise_ffi
+foreign import mkPromiseImpl
   :: forall a b
    . Fn1 ((a -> Effect Unit) -> (b -> Effect Unit) -> Effect Unit)
          (Effect (Promise a b))
@@ -50,48 +51,61 @@ mkPromise
   :: forall a b
    . ((a -> Effect Unit) -> (b -> Effect Unit) -> Effect Unit)
   -> Effect (Promise a b)
-mkPromise = runFn1 mkPromise_ffi
+mkPromise = runFn1 mkPromiseImpl
 
 
 --------------------------------------------------------------------------------
--- then_
+-- then
 --------------------------------------------------------------------------------
 
-foreign import then_ffi
+foreign import thnImpl
   :: forall a b
    . Fn2 (a -> Effect Unit)
          (Promise a b)
          (Effect (Promise a b))
 
-then_ :: forall a b
+thn :: forall a b
        . (a -> Effect Unit)
       -> Promise a b
       -> Effect (Promise a b)
-then_ = runFn2 then_ffi
+thn = runFn2 thnImpl
 
 
 --------------------------------------------------------------------------------
 -- then'
 --------------------------------------------------------------------------------
 
-foreign import then2_ffi
+foreign import thnPrimeImpl
   :: forall a b c d
    . Fn2 (a -> Effect (Promise c d))
          (Promise a b)
          (Effect (Promise c d))
 
-then' :: forall a b c d
+thn' :: forall a b c d
        . (a -> Effect (Promise c d))
       -> Promise a b
       -> Effect (Promise c d)
-then' = runFn2 then2_ffi
+thn' = runFn2 thnPrimeImpl
+
+
+--------------------------------------------------------------------------------
+-- then_
+--------------------------------------------------------------------------------
+
+thn_ :: forall a b
+       . (a -> Effect Unit)
+      -> Promise a b
+      -> Effect (Promise Unit b)
+thn_ actionF p =
+  pure p >>= (thn' (\v -> do _ <- actionF v
+                             mkResolve unit))
 
 
 --------------------------------------------------------------------------------
 -- catch_
 --------------------------------------------------------------------------------
 
-foreign import catch_ffi
+foreign import catchImpl
   :: forall a b
    . Fn2 (b -> Effect Unit)
          (Promise a b)
@@ -101,7 +115,7 @@ catch_ :: forall a b eff
         . (b -> Effect Unit)
        -> Promise a b
        -> Effect (Promise a b)
-catch_ = runFn2 catch_ffi
+catch_ = runFn2 catchImpl
 
 
 
@@ -109,7 +123,7 @@ catch_ = runFn2 catch_ffi
 -- finally_
 --------------------------------------------------------------------------------
 
-foreign import finally_ffi
+foreign import finallyImpl
   :: forall a b
    . Fn2 (Unit -> Effect Unit)
          (Promise a b)
@@ -119,7 +133,7 @@ finally_ :: forall a b
         . (Unit -> Effect Unit)
        -> Promise a b
        -> Effect (Promise a b)
-finally_ = runFn2 finally_ffi
+finally_ = runFn2 finallyImpl
 
 
 
@@ -127,7 +141,7 @@ finally_ = runFn2 finally_ffi
 -- mkReject
 --------------------------------------------------------------------------------
 
-foreign import mkReject_ffi
+foreign import mkRejectImpl
   :: forall a b
    . Fn1 b
          (Effect (Promise a b))
@@ -135,7 +149,7 @@ foreign import mkReject_ffi
 mkReject :: forall a b
           . b
          -> Effect (Promise a b)
-mkReject = runFn1 mkReject_ffi
+mkReject = runFn1 mkRejectImpl
 
 
 
@@ -143,7 +157,7 @@ mkReject = runFn1 mkReject_ffi
 -- mkResolve
 --------------------------------------------------------------------------------
 
-foreign import mkResolve_ffi
+foreign import mkResolveImpl
   :: forall a b
    . Fn1 a
          (Effect (Promise a b))
@@ -151,7 +165,7 @@ foreign import mkResolve_ffi
 mkResolve :: forall a b
            . a
           -> Effect (Promise a b)
-mkResolve = runFn1 mkResolve_ffi
+mkResolve = runFn1 mkResolveImpl
 
 
 
@@ -159,7 +173,7 @@ mkResolve = runFn1 mkResolve_ffi
 -- race
 --------------------------------------------------------------------------------
 
-foreign import race_ffi
+foreign import raceImpl
   :: forall a b
    . Fn1 (Array (Promise a b))
          (Effect (Promise a b))
@@ -167,7 +181,7 @@ foreign import race_ffi
 race :: forall a b
       . Array (Promise a b)
      -> Effect (Promise a b)
-race = runFn1 race_ffi
+race = runFn1 raceImpl
 
 
 
@@ -175,7 +189,7 @@ race = runFn1 race_ffi
 -- all
 --------------------------------------------------------------------------------
 
-foreign import all_ffi
+foreign import allImpl
   :: forall a b
    . Fn1 (Array (Promise a b))
          (Effect (Promise a b))
@@ -183,4 +197,4 @@ foreign import all_ffi
 all :: forall a b
      . Array (Promise a b)
     -> Effect (Promise a b)
-all = runFn1 all_ffi
+all = runFn1 allImpl
