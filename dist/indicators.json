@@ -27,7 +27,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 12.0
   },
   {
     "indType": "unknown",
@@ -71,7 +72,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "unknown",
@@ -100,7 +102,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "unknown",
@@ -144,7 +147,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 15.0
   },
   {
     "indType": "unknown",
@@ -173,7 +177,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 12.0
   },
   {
     "indType": "guage",
@@ -188,7 +193,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 12.0
   },
   {
     "indType": "label",
@@ -218,7 +224,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "label",
@@ -248,7 +255,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 99.0
   },
   {
     "indType": "guage",
@@ -263,7 +271,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "guage",
@@ -278,7 +287,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 30.0
   },
   {
     "indType": "guage",
@@ -293,7 +303,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 12.0
   },
   {
     "indType": "unknown",
@@ -438,7 +449,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 16.0
   },
   {
     "indType": "unknown",
@@ -482,7 +494,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 99.0
   },
   {
     "indType": "guage",
@@ -497,7 +510,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "boolean",
@@ -545,7 +559,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "unknown",
@@ -724,7 +739,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 14.0
   },
   {
     "indType": "unknown",
@@ -845,7 +861,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 30.0
   },
   {
     "indType": "unknown",
@@ -889,7 +906,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 7.0
   },
   {
     "indType": "unknown",
@@ -918,7 +936,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 14.0
   },
   {
     "indType": "unknown",
@@ -961,7 +980,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "unknown",
@@ -990,7 +1010,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "guage",
@@ -1005,7 +1026,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 14.0
   },
   {
     "indType": "label",
@@ -1064,7 +1086,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 16.0
   },
   {
     "indType": "unknown",
@@ -1108,7 +1131,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 16.0
   },
   {
     "indType": "guage",
@@ -1123,7 +1147,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "guage",
@@ -1138,7 +1163,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 11.0
   },
   {
     "indType": "guage",
@@ -1153,7 +1179,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "guage",
@@ -1168,7 +1195,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "label",
@@ -1198,7 +1226,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 99.0
   },
   {
     "indType": "unknown",
@@ -1256,7 +1285,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 16.0
   },
   {
     "indType": "unknown",
@@ -1285,7 +1315,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "guage",
@@ -1300,7 +1331,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "guage",
@@ -1315,7 +1347,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "unknown",
@@ -1359,7 +1392,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 9.0
   },
   {
     "indType": "guage",
@@ -1374,7 +1408,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 99.0
   },
   {
     "indType": "label",
@@ -1404,7 +1439,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 16.0
   },
   {
     "indType": "guage",
@@ -1419,7 +1455,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "guage",
@@ -1434,7 +1471,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "label",
@@ -1564,7 +1602,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 15.0
   },
   {
     "indType": "unknown",
@@ -1666,7 +1705,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "unknown",
@@ -1739,7 +1779,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 11.0
   },
   {
     "indType": "unknown",
@@ -1783,7 +1824,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "label",
@@ -1886,7 +1928,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 14.0
   },
   {
     "indType": "label",
@@ -2004,7 +2047,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 11.0
   },
   {
     "indType": "label",
@@ -2034,7 +2078,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 11.0
   },
   {
     "indType": "boolean",
@@ -2067,7 +2112,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 10.0
   },
   {
     "indType": "guage",
@@ -2082,7 +2128,8 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 100.0
   },
   {
     "indType": "unknown",
@@ -2156,6 +2203,7 @@
     "rotation": 0.0,
     "scale": 1.0,
     "orientation": "p",
-    "maxValue": 0.0
+    "minValue": 0.0,
+    "maxValue": 14.0
   }
 ]

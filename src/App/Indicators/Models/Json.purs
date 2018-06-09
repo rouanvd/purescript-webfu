@@ -139,6 +139,7 @@ readGuageIndicator v = do
   text         <- v ! "text" >>= readString
   values       <- v ! "values" >>= readArray >>= (traverse readNumber)
 
+  minValue     <- v ! "minValue" >>= readNumber
   maxValue     <- v ! "maxValue" >>= readNumber
 
   pure $ GuageInd
@@ -154,6 +155,7 @@ readGuageIndicator v = do
     , orientation
     , text
     , values
+    , minValue
     , maxValue
     }
 

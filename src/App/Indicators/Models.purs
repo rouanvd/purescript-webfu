@@ -21,7 +21,8 @@ module App.Indicators.Models
 , indIncScale
 , indDecScale
 , blnGetColor
-, ggeIntMaxValue
+, ggeIntMinValue'
+, ggeIntMaxValue'
 ) where
 
 import Prelude
@@ -222,9 +223,14 @@ blnGetColor props =
 
 type GuageIndProperties =
   IndProperties
-  ( maxValue :: Number
+  ( minValue :: Number
+  , maxValue :: Number
   )
 
 
-ggeIntMaxValue :: GuageIndProperties -> Int
-ggeIntMaxValue props = round props.maxValue
+ggeIntMinValue' :: GuageIndProperties -> Int
+ggeIntMinValue' props = round props.minValue
+
+
+ggeIntMaxValue' :: GuageIndProperties -> Int
+ggeIntMaxValue' props = round props.maxValue
