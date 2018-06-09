@@ -1,16 +1,25 @@
 module App.Indicators.Models
-( Orientation(..)
+( IndValue
+, Orientation(..)
 , ColorRange
 , IndProperties
 , BooleanIndProperties
 , LabelIndProperties
 , GuageIndProperties
 , Indicator(..)
+, lookupValuesForIndicator
+, indText'
+, indText
+, indSetText
+, indSetTextFromValues
 , indValue'
 , indValue
 , indIntValue'
 , indIntValue
 , indIncValues
+, indSetValues
+, indIncScale
+, indDecScale
 , blnGetColor
 , ggeIntMaxValue
 ) where
@@ -18,7 +27,25 @@ module App.Indicators.Models
 import Prelude
 import Data.Foldable (foldl)
 import Data.Int (toNumber, round)
-import Data.Array (length)
+import Data.Array (length, filter, intercalate)
+
+
+-----------------------------------------------------------
+-- INDICATOR VALUE DATA & FUNCTIONS
+-----------------------------------------------------------
+
+type IndValue =
+  { indId :: String
+  , value :: String
+  , tagId :: String
+  }
+
+
+lookupValuesForIndicator :: Array IndValue -> Indicator -> Array String
+lookupValuesForIndicator values ind =
+  values # filter (\v -> v.indId == indId ind)
+         # map _.value
+
 
 -----------------------------------------------------------
 -- BASE INDICATOR DATA & FUNCTIONS
@@ -37,11 +64,13 @@ type IndProperties r =
   , id          :: String
   , x           :: Int
   , y           :: Int
+  , z           :: Int
   , width       :: Int
   , height      :: Int
   , rotation    :: Number
   , scale       :: Number
   , orientation :: Orientation
+  , text        :: String
   , values      :: Array Number
   | r
   }
@@ -56,6 +85,12 @@ indIncScale' inc props = props { scale = props.scale + inc }
 indDecScale' :: forall r. Number -> IndProperties r -> IndProperties r
 indDecScale' dec props = props { scale = props.scale - dec }
 
+indText' :: forall r. IndProperties r -> String
+indText' props = props.text
+
+indSetText' :: forall r. String -> IndProperties r -> IndProperties r
+indSetText' text props = props { text = text }
+
 indValue' :: forall r. IndProperties r -> Number
 indValue' props =
   if length props.values <= 0
@@ -69,10 +104,16 @@ indIntValue' props =
     else props.values # foldl (+) 0.0 # (_ / (toNumber $ length props.values)) # round
 
 indIncValues' :: forall r. Number -> IndProperties r -> IndProperties r
-indIncValues' inc props = props { values = map (_ + inc) props.values }
+indIncValues' inc props =
+  if length props.values <= 0
+    then props { values = [inc] }
+    else props { values = map (_ + inc) props.values }
 
 indDecValues' :: forall r. Number -> IndProperties r -> IndProperties r
-indDecValues' dec props = props { values = map (_ - dec) props.values }
+indDecValues' dec props =
+  if length props.values <= 0
+    then props { values = [0.0 - dec] }
+    else props { values = map (_ - dec) props.values }
 
 
 
@@ -81,22 +122,26 @@ data Indicator
   = LabelInd LabelIndProperties
   | BooleanInd BooleanIndProperties
   | GuageInd GuageIndProperties
+  | UnknownInd (IndProperties ())
 
 
 indMap :: (forall r. IndProperties r -> IndProperties r) -> Indicator -> Indicator
 indMap f (LabelInd p)   = LabelInd $ f p
 indMap f (BooleanInd p) = BooleanInd $ f p
 indMap f (GuageInd p)   = GuageInd $ f p
+indMap f (UnknownInd p) = UnknownInd $ f p
 
 indGet :: forall a. (forall r. IndProperties r -> a) -> Indicator -> a
 indGet f (LabelInd p)   = f p
 indGet f (BooleanInd p) = f p
 indGet f (GuageInd p)   = f p
+indGet f (UnknownInd p) = f p
 
 indId :: Indicator -> String
 indId (LabelInd {id})   = id
 indId (BooleanInd {id}) = id
 indId (GuageInd {id})   = id
+indId (UnknownInd {id}) = id
 
 indSetScale :: Number -> Indicator -> Indicator
 indSetScale scale = indMap (indSetScale' scale)
@@ -106,6 +151,15 @@ indIncScale inc = indMap (indIncScale' inc)
 
 indDecScale :: Number -> Indicator -> Indicator
 indDecScale dec = indMap (indDecScale' dec)
+
+indText :: Indicator -> String
+indText = indGet indText'
+
+indSetText :: String -> Indicator -> Indicator
+indSetText text = indMap (indSetText' text)
+
+indSetTextFromValues :: Array String -> Indicator -> Indicator
+indSetTextFromValues values = indSetText $ intercalate ", " values
 
 indValue :: Indicator -> Number
 indValue = indGet indValue'
@@ -134,8 +188,7 @@ indDecValues dec = indMap (indDecValues' dec)
 
 type LabelIndProperties =
   IndProperties
-  ( text         :: String
-  , fontSizeInPx :: Number
+  ( fontSizeInPx :: Number
   )
 
 
@@ -169,8 +222,7 @@ blnGetColor props =
 
 type GuageIndProperties =
   IndProperties
-  ( desc     :: String
-  , maxValue :: Number
+  ( maxValue :: Number
   )
 
 

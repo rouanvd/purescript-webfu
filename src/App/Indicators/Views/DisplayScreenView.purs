@@ -10,6 +10,7 @@ import Effect.Ref (read, write) as Ref
 import Data.Array (find, findIndex, updateAt)
 import Data.Number as Number
 import Data.Maybe (Maybe(..), maybe)
+import Webfu.Data.Err (Err(..))
 import Webfu.DOM
 import Webfu.DOM.Promise
 import Webfu.Mithril (VNode, Component, mkComponent, raise, redraw)
@@ -29,6 +30,8 @@ import App.Indicators.Views.Indicators (indRender)
 data Msg
   = LoadIndicators
   | IncrementValues
+  | IncreaseZoom
+  | DecreaseZoom
   -- = IncrementValues
   -- | AlertDomValues
   -- | SetIndicatorValue
@@ -36,14 +39,15 @@ data Msg
   -- | DecreaseZoom
 
 update :: Ref DisplayScreenPresenter -> Msg -> Effect Unit
-update refP LoadIndicators = void $
-  Presenter.loadIndicators refP
-  >>= (thn_ (\_ -> redraw ))
+update refPr LoadIndicators = void $
+  Presenter.loadIndicators refPr
+  >>= (thn' (\_ -> Presenter.loadValues refPr))
+  >>= (thn_ (\_ -> redraw))
+  >>= (catch_ (\(Err err) -> log err))
 
-
-update refP IncrementValues =
-  Presenter.incrementIndicatorValues refP
-
+update refPr IncrementValues = Presenter.incrementIndicatorValues refPr
+update refPr IncreaseZoom = Presenter.increaseZoom refPr
+update refPr DecreaseZoom = Presenter.decreaseZoom refPr
 
 
 
@@ -92,18 +96,18 @@ raiseEvent refSt = raise update refSt
 -- mkView :: forall eff. Unit -> Eff eff Component
 mkView :: DisplayScreenPresenter -> Component
 mkView presenter =
-  mkComponent presenter (\prRef _ -> do
-    p <- Ref.read prRef
+  mkComponent presenter (\refPr _ -> do
+    p <- Ref.read refPr
     pure $ main [] [
       h1' ["style":="color:red;"] "Bukela",
       --mcomp (HWComponent.mkView { name: "RvD" }),
-      button' ["onclick":= \_ -> raiseEvent prRef IncrementValues] "++",
-      button' ["onclick":= \_ -> raiseEvent prRef LoadIndicators] "??",
+      button' ["onclick":= \_ -> raiseEvent refPr IncrementValues] "++",
+      button' ["onclick":= \_ -> raiseEvent refPr LoadIndicators] "??",
       -- select ["id":="indicatorName"] (map (\ind -> option ["value":= indId ind] (indId ind)) st.indicators),
       -- input ["type":= "text", "id":= "newIndicatorValue", "style":="width:450px"],
       -- button' ["onclick":= \_ -> raiseEvent stRef SetIndicatorValue] "!!",
-      -- button' ["onclick":= \_ -> raiseEvent stRef IncreaseZoom] "Z+",
-      -- button' ["onclick":= \_ -> raiseEvent stRef DecreaseZoom] "Z-",
+      button' ["onclick":= \_ -> raiseEvent refPr IncreaseZoom] "Z+",
+      button' ["onclick":= \_ -> raiseEvent refPr DecreaseZoom] "Z-",
       --br [],
       svg ["id":="svg", "viewBox":="0 0 300 150"] (map indRender p.model.indicators)
       ])
