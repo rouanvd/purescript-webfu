@@ -111,7 +111,7 @@ foreign import catchImpl
          (Promise a b)
          (Effect (Promise a b))
 
-catch_ :: forall a b eff
+catch_ :: forall a b
         . (b -> Effect Unit)
        -> Promise a b
        -> Effect (Promise a b)

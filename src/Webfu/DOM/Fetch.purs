@@ -99,14 +99,13 @@ fetchOpts =
 
 
 foreign import win_fetch_foreign
-  :: forall eff
-   . String
+  :: String
   -> Obj
   -> Window
   -> Effect (Promise Response TypeError)
 
-win_fetch :: forall eff. String -> Window -> Effect (Promise Response TypeError)
+win_fetch :: String -> Window -> Effect (Promise Response TypeError)
 win_fetch url w = win_fetch_foreign url empty w
 
-win_fetch' :: forall eff. String -> Options -> Window -> Effect (Promise Response TypeError)
+win_fetch' :: String -> Options -> Window -> Effect (Promise Response TypeError)
 win_fetch' url opts w = win_fetch_foreign url (options opts) w
