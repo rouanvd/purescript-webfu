@@ -63,8 +63,8 @@ readLabelIndicator v = do
   scale        <- v ! "scale" >>= readNumber
   orientation  <- v ! "orientation" >>= readOrientation
   text         <- v ! "text" >>= readString
-  values       <- v ! "values" >>= readArray >>= (traverse readNumber)
 
+  values       <- v ! "values" >>= readArray >>= (traverse readString)
   fontSizeInPx <- v ! "fontSizeInPx" >>= readNumber
 
   pure $ LabelInd
@@ -97,11 +97,9 @@ readBooleanIndicator v = do
   scale        <- v ! "scale" >>= readNumber
   orientation  <- v ! "orientation" >>= readOrientation
   text         <- v ! "text" >>= readString
-  values       <- v ! "values" >>= readArray >>= (traverse readNumber)
 
-  onValue      <- v ! "onValue" >>= readString
+  values       <- pure []
   onColor      <- v ! "onColor" >>= readString
-  offValue     <- v ! "offValue" >>= readString
   offColor     <- v ! "offColor" >>= readString
 
   pure $ BooleanInd
@@ -117,9 +115,7 @@ readBooleanIndicator v = do
     , orientation
     , text
     , values
-    , onValue
     , onColor
-    , offValue
     , offColor
     }
 
@@ -173,7 +169,6 @@ readUnknownIndicator v = do
   scale        <- v ! "scale" >>= readNumber
   orientation  <- v ! "orientation" >>= readOrientation
   text         <- v ! "text" >>= readString
-  values       <- v ! "values" >>= readArray >>= (traverse readNumber)
 
   pure $ UnknownInd
     { indType
@@ -187,7 +182,6 @@ readUnknownIndicator v = do
     , scale
     , orientation
     , text
-    , values
     }
 
 

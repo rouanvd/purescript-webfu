@@ -73,7 +73,7 @@ loadValues refPr = do
 updateIndicatorsWithValues :: Ref DisplayScreenPresenter -> Array IndValue -> Effect Unit
 updateIndicatorsWithValues refPr values = do
   presenter <- Ref.read refPr
-  let updatedIndicators = presenter.model.indicators # map \ind -> Model.indSetTextFromValues (Model.lookupValuesForIndicator values ind) ind
+  let updatedIndicators = presenter.model.indicators # map \ind -> Model.indSetValues (Model.lookupValuesForIndicator values ind) ind
   Ref.write (presenter { model { indicators = updatedIndicators } }) refPr
 
 
