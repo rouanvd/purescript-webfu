@@ -1,13 +1,17 @@
 module Webfu.Mithril.HTML
-  ( module Webfu.Mithril.HTML
-  , module Webfu.Data.ObjMap
-  )where
+( module Webfu.Mithril.HTML
+, module Webfu.Data.ObjMap
+, module Webfu.DOM.Events
+) where
 
+import Prelude (Unit, unit, class Show, show, (<>), (#))
 import Data.Either
 import Data.Array (foldl)
+import Effect (Effect)
+import Data.Function.Uncurried (Fn2, runFn2)
 import Foreign.Object (Object)
 import Foreign.Object (empty, insert, fold) as StrMap
-import Prelude (class Show, show, (<>), (#))
+import Webfu.DOM.Events
 import Webfu.Data.ObjMap (Obj, empty, (:=), mkObjWithProps)
 import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 
@@ -28,7 +32,7 @@ type AttributeSpec = Array AttributeSetterF
 type StrMapSetterF = Object String -> Object String
 type StrMapSpec = Array StrMapSetterF
 
-strMapInsert :: forall a. String -> String -> StrMapSetterF
+strMapInsert :: String -> String -> StrMapSetterF
 strMapInsert = StrMap.insert
 
 infixl 5 strMapInsert as :
@@ -128,3 +132,35 @@ svgCircle attrs = mkVNode (Left "circle") (mkObjWithProps attrs) []
 
 svgLine :: AttributeSpec -> VNode
 svgLine attrs = mkVNode (Left "line") (mkObjWithProps attrs) []
+
+
+---------------------------------------------------------------
+-- EVENTS
+---------------------------------------------------------------
+
+onMouseEnter :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseEnter f = "onmouseenter" := (\e -> f e)
+
+onMouseLeave :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseLeave f = "onmouseleave" := (\e -> f e)
+
+onMouseOver :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseOver f = "onmouseover" := (\e -> f e)
+
+onMouseOut :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseOut f = "onmouseout" := (\e -> f e)
+
+onMouseMove :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseMove f = "onmousemove" := (\e -> f e)
+
+onMouseDown :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseDown f = "onmousedown" := (\e -> f e)
+
+onMouseUp :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onMouseUp f = "onmouseup" := (\e -> f e)
+
+onClick :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onClick f = "onclick" := (\e -> f e)
+
+onDblClick :: (MouseEvent -> Effect Unit) -> AttributeSetterF
+onDblClick f = "ondblclick" := (\e -> f e)

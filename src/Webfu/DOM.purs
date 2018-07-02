@@ -9,14 +9,17 @@ module Webfu.DOM (
   elem_id,
   elem_attr,
   el_setAttr,
-  el_prop_value
+  el_prop_value,
+  el_setOnMouseMove
 ) where
 
 import Prelude (Unit, unit, ($))
 import Data.Maybe
+import Data.Function.Uncurried (Fn3, runFn3)
 import Effect (Effect)
 import Unsafe.Coerce (unsafeCoerce)
 import Webfu.DOM.Core
+import Webfu.DOM.Events
 import Webfu.DOM.Promise (Promise)
 
 
@@ -103,6 +106,7 @@ foreign import elem_attr_foreign :: forall a. Maybe a -> (a -> Maybe a) -> Strin
 elem_attr :: String -> Element -> Maybe String
 elem_attr attrName e  = elem_attr_foreign Nothing Just attrName e
 
+
 foreign import el_setAttr_foreign :: Unit -> String -> String -> Element -> Effect Unit
 el_setAttr :: String -> String -> Element -> Effect Unit
 el_setAttr attrName attrVal e  = el_setAttr_foreign unit attrName attrVal e
@@ -117,6 +121,11 @@ el_prop_value e =
     case maybePropVal of
       Nothing -> Nothing
       Just v  -> Just $ unsafeCoerce v
+
+
+foreign import el_setOnMouseMoveImpl :: Fn3 Unit (MouseEvent -> Effect Unit) Element (Effect Unit)
+el_setOnMouseMove :: (MouseEvent -> Effect Unit) -> Element -> Effect Unit
+el_setOnMouseMove eventHandlerF elem = runFn3 el_setOnMouseMoveImpl unit eventHandlerF elem
 
 ---------------------------------------------------------------
 -- SVG

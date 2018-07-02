@@ -258,3 +258,11 @@ exports.elem_prop_foreign = function (maybe_nothing) {
     };
   };
 };
+
+
+exports.el_setOnMouseMoveImpl = function(unitVal, eventHandlerF, elem) {
+  return function() { // Effect wrapper
+    elem.onmousemove = function(e) { eventHandlerF(e)(/*Eff*/); };
+    return unitVal;
+  };
+};
