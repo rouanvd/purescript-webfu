@@ -14,6 +14,7 @@ import Data.Maybe (Maybe(..), maybe)
 import Webfu.Data.Err (Err(..))
 import Webfu.DOM
 import Webfu.DOM.Promise
+import Webfu.DOM.Events (defaultPrevented, clientX, clientY)
 import Webfu.Mithril (VNode, Component, mkComponent, raise, redraw)
 import Webfu.Mithril.HTML
 import App.Indicators.Views.DisplayScreenPresenterM (DisplayScreenPresenter)
@@ -43,16 +44,16 @@ data Msg
 update :: Ref State -> Msg -> Effect Unit
 update refSt (OnMouseDown e) = do
   preventDefault e
-  _ <- Ref.modify (\st -> st { pos3 = e.clientX, pos4 = e.clientY }) refSt
+  _ <- Ref.modify (\st -> st { pos3 = clientX e, pos4 = clientY e }) refSt
   maybeDiv1 <- doc_getElementById "div1"
   case maybeDiv1 of
     Nothing   -> pure unit
     Just div1 -> el_setOnMouseMove (\e -> pure $ raiseEvent refSt (OnMouseMove e)) div1
-  -- log $ "mouse down: (" <> (show e.clientX) <> "," <> (show e.clientY) <> ") : " <> (show e.defaultPrevented)
+  -- log $ "mouse down: (" <> (show $ clientX e) <> "," <> (show $ clientY e) <> ") : " <> (show $ defaultPrevented e)
   pure unit
 
 update refSt (OnMouseMove e) = do
-  log $ "mouse move: (" <> (show e.clientX) <> "," <> (show e.clientY) <> ") : " <> (show e.defaultPrevented)
+  log $ "mouse move: (" <> (show $ clientX e) <> "," <> (show $ clientY e) <> ") : " <> (show $ defaultPrevented e)
   pure unit
 
 

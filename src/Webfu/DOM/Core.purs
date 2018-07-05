@@ -1,6 +1,5 @@
 module Webfu.DOM.Core
-  ( class Convertible, convert
-  , Node
+  ( Node
   , Window
   , Document
   , Element
@@ -9,6 +8,7 @@ module Webfu.DOM.Core
   , typeError_name
   ) where
 
+import Webfu.Data.Cast (class Cast)
 import Data.Function.Uncurried (Fn1, runFn1)
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -24,14 +24,12 @@ foreign import data Document :: Type
 foreign import data Element :: Type
 
 
-class Convertible a b where
-  convert :: a -> b
 
-instance convertable_Document_Node :: Convertible Document Node where
-  convert d = unsafeCoerce d
+instance convertable_Document_Node :: Cast Document Node where
+  cast d = unsafeCoerce d
 
-instance convertable_Element_Node :: Convertible Element Node where
-  convert e = unsafeCoerce e
+instance convertable_Element_Node :: Cast Element Node where
+  cast e = unsafeCoerce e
 
 
 

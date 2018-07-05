@@ -11,7 +11,7 @@ import Effect (Effect)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Foreign.Object (Object)
 import Foreign.Object (empty, insert, fold) as StrMap
-import Webfu.DOM.Events
+import Webfu.DOM.Events (MouseEvent, preventDefault)
 import Webfu.Data.ObjMap (Obj, empty, (:=), mkObjWithProps)
 import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 
