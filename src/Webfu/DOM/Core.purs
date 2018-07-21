@@ -6,11 +6,13 @@ module Webfu.DOM.Core
   , TypeError
   , typeError_message
   , typeError_name
+  , module Webfu.Data.Cast
   ) where
 
-import Webfu.Data.Cast (class Cast)
 import Data.Function.Uncurried (Fn1, runFn1)
 import Unsafe.Coerce (unsafeCoerce)
+import Webfu.Interop
+import Webfu.Data.Cast (class Cast, cast)
 
 
 -- https://dontcallmedom.github.io/webidlpedia/inheritance.html
@@ -25,12 +27,15 @@ foreign import data Element :: Type
 
 
 
-instance convertable_Document_Node :: Cast Document Node where
+instance cast_Document_Node :: Cast Document Node where
   cast d = unsafeCoerce d
 
-instance convertable_Element_Node :: Cast Element Node where
+instance cast_Element_Node :: Cast Element Node where
   cast e = unsafeCoerce e
 
+
+instance castElementToJsObject :: Cast Element JsObject where
+  cast = toJsObject
 
 
 --------------------------------------------------------------------------------

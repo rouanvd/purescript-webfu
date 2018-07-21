@@ -6,6 +6,14 @@ module Webfu.Interop
 , readNumber
 , readString
 , readChar
+, setBoolean
+, setInt
+, setNumber
+, setString
+, setChar
+, setFunc
+, setEffFunc
+, setEventHandler
 , runEffMethod0
 ) where
 
@@ -19,6 +27,9 @@ import Data.Function.Uncurried
 foreign import data JsObject :: Type
 
 foreign import readProp :: forall a. Fn2 String JsObject a
+foreign import setPropImpl :: forall a. Fn4 Unit String a JsObject (Effect Unit)
+foreign import setPropEffFuncImpl :: Fn4 Unit String (Unit -> Effect Unit) JsObject (Effect Unit)
+foreign import setPropEventHandlerImpl :: forall a. Fn4 Unit String (a -> Effect Unit) JsObject (Effect Unit)
 
 
 
@@ -42,6 +53,31 @@ readString = runFn2 readProp
 
 readChar :: String -> JsObject -> Char
 readChar = runFn2 readProp
+
+
+setBoolean :: String -> Boolean -> JsObject -> Effect Unit
+setBoolean = runFn4 setPropImpl unit
+
+setInt :: String -> Int -> JsObject -> Effect Unit
+setInt = runFn4 setPropImpl unit
+
+setNumber :: String -> Number -> JsObject -> Effect Unit
+setNumber = runFn4 setPropImpl unit
+
+setString :: String -> String -> JsObject -> Effect Unit
+setString = runFn4 setPropImpl unit
+
+setChar :: String -> Char -> JsObject -> Effect Unit
+setChar = runFn4 setPropImpl unit
+
+setFunc :: forall a. String -> a -> JsObject -> Effect Unit
+setFunc = runFn4 setPropImpl unit
+
+setEffFunc :: String -> (Unit -> Effect Unit) -> JsObject -> Effect Unit
+setEffFunc = runFn4 setPropEffFuncImpl unit
+
+setEventHandler :: forall a. String -> (a -> Effect Unit) -> JsObject -> Effect Unit
+setEventHandler = runFn4 setPropEventHandlerImpl unit
 
 
 foreign import runEffMethod0Impl :: Fn3 Unit String JsObject (Effect Unit)

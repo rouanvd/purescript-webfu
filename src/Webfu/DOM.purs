@@ -18,6 +18,7 @@ import Data.Maybe
 import Data.Function.Uncurried (Fn3, runFn3)
 import Effect (Effect)
 import Unsafe.Coerce (unsafeCoerce)
+import Webfu.Interop
 import Webfu.DOM.Core
 import Webfu.DOM.Events
 import Webfu.DOM.Promise (Promise)
@@ -123,9 +124,9 @@ el_prop_value e =
       Just v  -> Just $ unsafeCoerce v
 
 
-foreign import el_setOnMouseMoveImpl :: Fn3 Unit (MouseEvent -> Effect Unit) Element (Effect Unit)
 el_setOnMouseMove :: (MouseEvent -> Effect Unit) -> Element -> Effect Unit
-el_setOnMouseMove eventHandlerF elem = runFn3 el_setOnMouseMoveImpl unit eventHandlerF elem
+el_setOnMouseMove eventHandlerF elem = setEventHandler "onmousemove" eventHandlerF (cast elem)
+
 
 ---------------------------------------------------------------
 -- SVG
