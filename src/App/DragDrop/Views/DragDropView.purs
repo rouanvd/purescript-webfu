@@ -14,12 +14,14 @@ import Data.Maybe (Maybe(..), maybe)
 import Webfu.Data.Err (Err(..))
 import Webfu.DOM
 import Webfu.DOM.Promise
-import Webfu.DOM.Events (defaultPrevented, clientX, clientY)
+import Webfu.DOM.Events (defaultPrevented)
+import Webfu.DOM.Events.Mouse (clientX, clientY)
 import Webfu.Mithril (VNode, Component, mkComponent, raise, redraw)
 import Webfu.Mithril.HTML
 import App.Indicators.Views.DisplayScreenPresenterM (DisplayScreenPresenter)
 import App.Indicators.Views.DisplayScreenPresenterM as Presenter
 import App.Indicators.Views.Indicators (indRender)
+
 
 -----------------------------------------------------------
 -- STATE
