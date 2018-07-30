@@ -11,7 +11,7 @@ import Effect (Effect)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Foreign.Object (Object)
 import Foreign.Object (empty, insert, fold) as StrMap
-import Webfu.DOM.Events (MouseEvent, preventDefault)
+import Webfu.DOM.Events (MouseEvent, KeyboardEvent, preventDefault)
 import Webfu.Data.ObjMap (Obj, empty, (:=), mkObjWithProps)
 import Webfu.Mithril (Component, VNode, mkTextVNode, mkVNode, mkComponentVNode)
 
@@ -89,6 +89,35 @@ div :: AttributeSpec -> Array VNode -> VNode
 div attrs childNodes = mkVNode (Left "div") (mkObjWithProps attrs) childNodes
 
 
+---------------------------------------------------------------
+-- TABULAR DATA
+---------------------------------------------------------------
+
+table :: AttributeSpec -> Array VNode -> VNode
+table attrs childNodes = mkVNode (Left "table") (mkObjWithProps attrs) childNodes
+
+thead :: AttributeSpec -> Array VNode -> VNode
+thead attrs childNodes = mkVNode (Left "thead") (mkObjWithProps attrs) childNodes
+
+tbody :: AttributeSpec -> Array VNode -> VNode
+tbody attrs childNodes = mkVNode (Left "tbody") (mkObjWithProps attrs) childNodes
+
+tr :: AttributeSpec -> Array VNode -> VNode
+tr attrs childNodes = mkVNode (Left "tr") (mkObjWithProps attrs) childNodes
+
+th :: AttributeSpec -> Array VNode -> VNode
+th attrs childNodes = mkVNode (Left "th") (mkObjWithProps attrs) childNodes
+
+th' :: AttributeSpec -> String -> VNode
+th' attrs text = mkTextVNode (Left "th") (mkObjWithProps attrs) text
+
+td :: AttributeSpec -> Array VNode -> VNode
+td attrs childNodes = mkVNode (Left "td") (mkObjWithProps attrs) childNodes
+
+td' :: AttributeSpec -> String -> VNode
+td' attrs text = mkTextVNode (Left "td") (mkObjWithProps attrs) text
+
+
 
 ---------------------------------------------------------------
 -- INPUT CONTROLS
@@ -135,7 +164,21 @@ svgLine attrs = mkVNode (Left "line") (mkObjWithProps attrs) []
 
 
 ---------------------------------------------------------------
--- EVENTS
+-- KEYBOARD EVENTS
+---------------------------------------------------------------
+
+onKeyDown :: (KeyboardEvent -> Effect Unit) -> AttributeSetterF
+onKeyDown f = "onkeydown" := (\e -> f e)
+
+onKeyPress :: (KeyboardEvent -> Effect Unit) -> AttributeSetterF
+onKeyPress f = "onkeypress" := (\e -> f e)
+
+onKeyUp :: (KeyboardEvent -> Effect Unit) -> AttributeSetterF
+onKeyUp f = "onkeyup" := (\e -> f e)
+
+
+---------------------------------------------------------------
+-- MOUSE EVENTS
 ---------------------------------------------------------------
 
 onMouseEnter :: (MouseEvent -> Effect Unit) -> AttributeSetterF

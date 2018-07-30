@@ -5,6 +5,9 @@ import Webfu.Interop
 import Webfu.DOM.Events
 
 
+char :: KeyboardEvent -> String
+char = (readString "char") <<< toJsObject
+
 code :: KeyboardEvent -> String
 code = (readString "code") <<< toJsObject
 

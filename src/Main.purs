@@ -8,7 +8,6 @@ import Foreign.Object (Object, empty, insert)
 import Partial.Unsafe (unsafePartial)
 import Webfu.DOM (doc_querySelector)
 import Webfu.Mithril (Component, route) as M
-import Webfu.DOM.Test
 import Webfu.DOM.Promise
 
 import App.Indicators.Views.DisplayScreenView as DisplayScreenView
